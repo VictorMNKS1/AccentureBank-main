@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import accenturebank.com.accentureBank.entities.Agencia;
+import accenturebank.com.accentureBank.domain.Agencia;
+import accenturebank.com.accentureBank.dto.AgenciaDTO;
 import accenturebank.com.accentureBank.exceptions.AgenciaNotFoundException;
 import accenturebank.com.accentureBank.exceptions.CampoObrigatorioEmptyException;
 import accenturebank.com.accentureBank.exceptions.ErrorModel;
-import accenturebank.com.accentureBank.model.AgenciaModel;
 import accenturebank.com.accentureBank.service.AgenciaService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
@@ -42,9 +42,9 @@ public class AgenciaController {
 	
 	@PostMapping("/agencia")
 	
-	public ResponseEntity<Agencia> saveAgencia(@RequestBody AgenciaModel agenciaModel){
+	public ResponseEntity<Agencia> saveAgencia(@RequestBody AgenciaDTO agenciaDTO){
 		try {
-			Agencia agencia = agenciaService.saveOrUpdate(agenciaModel);
+			Agencia agencia = agenciaService.saveOrUpdate(agenciaDTO);
 			return new ResponseEntity<>(agencia, HttpStatus.OK);
 		}catch (CampoObrigatorioEmptyException e ) {
 			return new ResponseEntity<>(new ErrorModel(e.getMessage()), HttpStatus.NOT_FOUND);

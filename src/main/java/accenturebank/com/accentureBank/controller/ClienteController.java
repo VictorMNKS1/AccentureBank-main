@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import accenturebank.com.accentureBank.entities.Cliente;
+
+import accenturebank.com.accentureBank.domain.Cliente;
+import accenturebank.com.accentureBank.dto.ClienteDTO;
 import accenturebank.com.accentureBank.exceptions.AgenciaNotFoundException;
 import accenturebank.com.accentureBank.exceptions.CampoObrigatorioEmptyException;
 import accenturebank.com.accentureBank.exceptions.ClienteNotFoundException;
 import accenturebank.com.accentureBank.exceptions.ErrorModel;
-import accenturebank.com.accentureBank.model.ClienteModel;
 import accenturebank.com.accentureBank.service.ClienteService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
@@ -54,9 +55,9 @@ public class ClienteController {
 
 	// CRIACAO DO MAPEAMENTO DE POST QUE PUBLICA OS DETALHES DO CLIENTE NO BANCO DE DADOS
     @PostMapping("/cliente")
-    public ResponseEntity<Cliente> saveCliente(@RequestBody ClienteModel clienteModel) {
+    public ResponseEntity<Cliente> saveCliente(@RequestBody ClienteDTO clienteDTO) {
         try {
-            Cliente cliente = clienteService.saveOrUpdate(clienteModel);
+            Cliente cliente = clienteService.saveOrUpdate(clienteDTO);
             return new ResponseEntity<>(cliente, HttpStatus.CREATED);
         } catch (AgenciaNotFoundException e) {
             return new ResponseEntity<Cliente>(new ErrorModel(e.getMessage()), HttpStatus.NOT_FOUND);

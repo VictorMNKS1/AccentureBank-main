@@ -7,10 +7,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import accenturebank.com.accentureBank.entities.Agencia;
+import accenturebank.com.accentureBank.domain.Agencia;
+import accenturebank.com.accentureBank.dto.AgenciaDTO;
 import accenturebank.com.accentureBank.exceptions.AgenciaNotFoundException;
 import accenturebank.com.accentureBank.exceptions.CampoObrigatorioEmptyException;
-import accenturebank.com.accentureBank.model.AgenciaModel;
 import accenturebank.com.accentureBank.repositories.AgenciaRepository;
 
 @Service
@@ -34,10 +34,10 @@ public class AgenciaService {
 		return agencias;
 	}
 	
-	public Agencia saveOrUpdate(AgenciaModel agenciaModel) throws CampoObrigatorioEmptyException {
-		Agencia agencia = new Agencia(null, agenciaModel.getNomeAgencia(), agenciaModel.getEnderecoAgencia(), agenciaModel.getFoneAgencia());
+	public Agencia saveOrUpdate(AgenciaDTO agenciaDTO) throws CampoObrigatorioEmptyException {
+		Agencia agencia = new Agencia(null, agenciaDTO.getNomeAgencia(), agenciaDTO.getEnderecoAgencia(), agenciaDTO.getFoneAgencia());
 		
-		if (agenciaModel.getNomeAgencia().isEmpty() || agenciaModel.getEnderecoAgencia().isEmpty() || agenciaModel.getFoneAgencia().isEmpty()) {
+		if (agenciaDTO.getNomeAgencia().isEmpty() || agenciaDTO.getEnderecoAgencia().isEmpty() || agenciaDTO.getFoneAgencia().isEmpty()) {
             throw new CampoObrigatorioEmptyException("Campo obrigatório vazio.");
         }
 		

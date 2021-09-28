@@ -7,11 +7,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import accenturebank.com.accentureBank.entities.Cliente;
+import accenturebank.com.accentureBank.domain.Cliente;
+import accenturebank.com.accentureBank.dto.ClienteDTO;
 import accenturebank.com.accentureBank.exceptions.AgenciaNotFoundException;
 import accenturebank.com.accentureBank.exceptions.CampoObrigatorioEmptyException;
 import accenturebank.com.accentureBank.exceptions.ClienteNotFoundException;
-import accenturebank.com.accentureBank.model.ClienteModel;
 import accenturebank.com.accentureBank.repositories.ClienteRepository;
 
 @Service
@@ -39,8 +39,8 @@ public class ClienteService {
     }
     
     //CRIA UM NOVO CLIENTE
-    public Cliente saveOrUpdate(ClienteModel clienteModel) throws AgenciaNotFoundException {
-    	Cliente cliente = new Cliente(null,clienteModel.getNome(),clienteModel.getCpf(),clienteModel.getFone());
+    public Cliente saveOrUpdate(ClienteDTO clienteDTO) throws AgenciaNotFoundException {
+    	Cliente cliente = new Cliente(null,clienteDTO.getNome(),clienteDTO.getCpf(),clienteDTO.getFone());
     	
     	if (cliente.getNome().isEmpty() || cliente.getCpf().isEmpty() || cliente.getFone().isEmpty()) {
             throw new CampoObrigatorioEmptyException("Campo obrigatório vazio.");

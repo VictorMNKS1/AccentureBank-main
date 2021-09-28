@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import accenturebank.com.accentureBank.entities.Extrato;
+import accenturebank.com.accentureBank.domain.Extrato;
 import accenturebank.com.accentureBank.exceptions.ContaCorrenteNotFoundException;
 import accenturebank.com.accentureBank.exceptions.ErrorModel;
 import accenturebank.com.accentureBank.service.ExtratoService;

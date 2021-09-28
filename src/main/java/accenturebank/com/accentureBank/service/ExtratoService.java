@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import accenturebank.com.accentureBank.entities.Cliente;
-import accenturebank.com.accentureBank.entities.ContaCorrente;
-import accenturebank.com.accentureBank.entities.Extrato;
+import accenturebank.com.accentureBank.domain.Cliente;
+import accenturebank.com.accentureBank.domain.ContaCorrente;
+import accenturebank.com.accentureBank.domain.Extrato;
 import accenturebank.com.accentureBank.exceptions.ContaCorrenteNotFoundException;
 import accenturebank.com.accentureBank.repositories.ContaCorrenteRepository;
 import accenturebank.com.accentureBank.repositories.ExtratoRepository;

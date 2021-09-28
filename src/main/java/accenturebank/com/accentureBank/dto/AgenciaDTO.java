@@ -1,34 +1,36 @@
-package accenturebank.com.accentureBank.model;
+package accenturebank.com.accentureBank.dto;
 
 import java.io.Serializable;
 
-public class AgenciaModel implements Serializable {
+import accenturebank.com.accentureBank.domain.Agencia;
+
+public class AgenciaDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private Long id;
+	//private Long id;
 	private String nomeAgencia;
     private String enderecoAgencia;
     private String foneAgencia;
     
-    public AgenciaModel () {
+    public AgenciaDTO () {
     	
     }
 
-	public AgenciaModel(Long id, String nomeAgencia, String enderecoAgencia, String foneAgencia) {
+	public AgenciaDTO(Agencia obj) {
 		super();
-		this.id = id;
-		this.nomeAgencia = nomeAgencia;
-		this.enderecoAgencia = enderecoAgencia;
-		this.foneAgencia = foneAgencia;
+		//id = obj.getId();
+		nomeAgencia = obj.getNome();
+		enderecoAgencia = obj.getEndereco();
+		foneAgencia = obj.getTelefone();
 	}
 
-	public Long getId() {
-		return id;
-	}
+	//public Long getId() {
+		//return id;
+	//}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+	//public void setId(Long id) {
+		//this.id = id;
+	//}
 
 	public String getNomeAgencia() {
 		return nomeAgencia;

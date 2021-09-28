@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import accenturebank.com.accentureBank.entities.ContaCorrente;
+import accenturebank.com.accentureBank.domain.ContaCorrente;
+import accenturebank.com.accentureBank.dto.ContaCorrenteDTO;
 import accenturebank.com.accentureBank.exceptions.AgenciaNotFoundException;
 import accenturebank.com.accentureBank.exceptions.ClienteNotFoundException;
 import accenturebank.com.accentureBank.exceptions.ContaCorrenteNotFoundException;
 import accenturebank.com.accentureBank.exceptions.ErrorModel;
-import accenturebank.com.accentureBank.model.ContaCorrenteModel;
 import accenturebank.com.accentureBank.service.ContaCorrenteService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
@@ -43,9 +43,9 @@ public class ContaCorrenteController {
 	}
         
     @PostMapping("/contacorrente")
-	public ResponseEntity<ContaCorrente> saveContaCorrente(@RequestBody ContaCorrenteModel contaCorrenteModel)  {
+	public ResponseEntity<ContaCorrente> saveContaCorrente(@RequestBody ContaCorrenteDTO contaCorrenteDTO)  {
 		 try {
-	            ContaCorrente contaCorrente = contaCorrenteService.saveOrUpdate(contaCorrenteModel);
+	            ContaCorrente contaCorrente = contaCorrenteService.saveOrUpdate(contaCorrenteDTO);
 	            return new ResponseEntity<>(contaCorrente, HttpStatus.CREATED);
 	        } catch (ClienteNotFoundException | AgenciaNotFoundException e) {
 	            return new ResponseEntity<ContaCorrente>(new ErrorModel(e.getMessage()), HttpStatus.NOT_FOUND);

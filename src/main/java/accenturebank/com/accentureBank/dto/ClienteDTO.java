@@ -1,34 +1,36 @@
-package accenturebank.com.accentureBank.model;
+package accenturebank.com.accentureBank.dto;
 
 import java.io.Serializable;
 
-public class ClienteModel implements Serializable {
+import accenturebank.com.accentureBank.domain.Cliente;
+
+public class ClienteDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	private Long id;
+
+	// private Long id;
 	private String nome;
 	private String cpf;
 	private String fone;
 
-	public ClienteModel() {
+	public ClienteDTO() {
 
 	}
 
-	public ClienteModel(Long id, String nome, String cpf, String fone) {
+	public ClienteDTO(Cliente obj) {
 		super();
-		this.id = id;
-		this.nome = nome;
-		this.cpf = cpf;
-		this.fone = fone;
+		// id = obj.getId();
+		nome = obj.getNome();
+		cpf = obj.getCpf();
+		fone = obj.getFone();
 	}
 
-	public Long getId() {
-		return id;
-	}
+	// public Long getId() {
+	// return id;
+	// }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+	// public void setId(Long id) {
+	// this.id = id;
+	//}
 
 	public String getNome() {
 		return nome;
@@ -53,5 +55,5 @@ public class ClienteModel implements Serializable {
 	public void setFone(String fone) {
 		this.fone = fone;
 	}
-	
+
 }

@@ -8,13 +8,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import accenturebank.com.accentureBank.entities.Agencia;
-import accenturebank.com.accentureBank.entities.Cliente;
-import accenturebank.com.accentureBank.entities.ContaCorrente;
-import accenturebank.com.accentureBank.entities.Extrato;
+import accenturebank.com.accentureBank.domain.Agencia;
+import accenturebank.com.accentureBank.domain.Cliente;
+import accenturebank.com.accentureBank.domain.ContaCorrente;
+import accenturebank.com.accentureBank.domain.Extrato;
+import accenturebank.com.accentureBank.dto.ContaCorrenteDTO;
 import accenturebank.com.accentureBank.exceptions.AgenciaNotFoundException;
 import accenturebank.com.accentureBank.exceptions.ContaCorrenteNotFoundException;
-import accenturebank.com.accentureBank.model.ContaCorrenteModel;
 import accenturebank.com.accentureBank.repositories.AgenciaRepository;
 import accenturebank.com.accentureBank.repositories.ContaCorrenteRepository;
 import accenturebank.com.accentureBank.repositories.ExtratoRepository;
@@ -98,12 +98,12 @@ public class ContaCorrenteService {
 
 	}
 
-	public ContaCorrente saveOrUpdate(ContaCorrenteModel contaCorrenteModel) throws AgenciaNotFoundException {
-		Cliente clienteRetorno = clienteService.getClienteById(contaCorrenteModel.getIdCliente().getId());
-		Agencia agenciaRetorno = agenciaService.getAgenciaById(contaCorrenteModel.getIdAgencia().getId());
+	public ContaCorrente saveOrUpdate(ContaCorrenteDTO contaCorrenteDTO) throws AgenciaNotFoundException {
+		Cliente clienteRetorno = clienteService.getClienteById(contaCorrenteDTO.getIdCliente());
+		Agencia agenciaRetorno = agenciaService.getAgenciaById(contaCorrenteDTO.getIdAgencia());
 
-		Cliente cliente = new Cliente(contaCorrenteModel.getIdCliente().getId(), null, null, null);
-		Agencia agencia = new Agencia(contaCorrenteModel.getIdAgencia().getId(), null, null, null);
+		Cliente cliente = new Cliente(contaCorrenteDTO.getIdCliente(), null, null, null);
+		Agencia agencia = new Agencia(contaCorrenteDTO.getIdAgencia(), null, null, null);
 
 		ContaCorrente contaCorrente = new ContaCorrente(null, agencia, gerarNumeroContaCorrente(), 0, cliente);
 		ContaCorrente contaCorrenteRetorno = contaCorrenteRepository.save(contaCorrente);

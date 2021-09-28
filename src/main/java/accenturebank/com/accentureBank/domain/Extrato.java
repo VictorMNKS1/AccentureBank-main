@@ -1,4 +1,4 @@
-package accenturebank.com.accentureBank.entities;
+package accenturebank.com.accentureBank.domain;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
