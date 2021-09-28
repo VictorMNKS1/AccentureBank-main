@@ -40,7 +40,7 @@ public class ClienteService {
     
     //CRIA UM NOVO CLIENTE
     public Cliente saveOrUpdate(ClienteDTO clienteDTO) throws AgenciaNotFoundException {
-    	Cliente cliente = new Cliente(null,clienteDTO.getNome(),clienteDTO.getCpf(),clienteDTO.getFone());
+    	Cliente cliente = new Cliente(clienteDTO.getId(),clienteDTO.getNome(),clienteDTO.getCpf(),clienteDTO.getFone());
     	
     	if (cliente.getNome().isEmpty() || cliente.getCpf().isEmpty() || cliente.getFone().isEmpty()) {
             throw new CampoObrigatorioEmptyException("Campo obrigatório vazio.");

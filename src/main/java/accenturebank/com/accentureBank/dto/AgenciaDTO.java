@@ -7,7 +7,7 @@ import accenturebank.com.accentureBank.domain.Agencia;
 public class AgenciaDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	//private Long id;
+	private Long id;
 	private String nomeAgencia;
     private String enderecoAgencia;
     private String foneAgencia;
@@ -17,20 +17,20 @@ public class AgenciaDTO implements Serializable {
     }
 
 	public AgenciaDTO(Agencia obj) {
-		super();
-		//id = obj.getId();
-		nomeAgencia = obj.getNome();
-		enderecoAgencia = obj.getEndereco();
-		foneAgencia = obj.getTelefone();
+		
+		this.id = obj.getId();
+		this.nomeAgencia = obj.getNome();
+		this.enderecoAgencia = obj.getEndereco();
+		this.foneAgencia = obj.getTelefone();
 	}
 
-	//public Long getId() {
-		//return id;
-	//}
+	public Long getId() {
+		return id;
+	}
 
-	//public void setId(Long id) {
-		//this.id = id;
-	//}
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getNomeAgencia() {
 		return nomeAgencia;

@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import accenturebank.com.accentureBank.entities.enums.TipoDeOperacao;
+import accenturebank.com.accentureBank.entities.enums.TipoDeOperacaoEnum;
 
 
 @Entity
@@ -27,7 +27,7 @@ public class Extrato implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", timezone = "GMT-3")
 	private LocalDateTime dataHoraMovimento;
 	
-	private TipoDeOperacao operacao;
+	private TipoDeOperacaoEnum operacao;
 	
 	@ManyToOne
 	@JoinColumn(name = "conta_corrente_id")
@@ -37,7 +37,7 @@ public class Extrato implements Serializable {
 	public Extrato() {
 		}
 
-	public Extrato(Long id, LocalDateTime dataHoraMovimento, TipoDeOperacao operacao, ContaCorrente contaCorrente) {
+	public Extrato(Long id, LocalDateTime dataHoraMovimento, TipoDeOperacaoEnum operacao, ContaCorrente contaCorrente) {
 		super();
 		this.id = id;
 		this.dataHoraMovimento = dataHoraMovimento;
@@ -61,11 +61,11 @@ public class Extrato implements Serializable {
 		this.dataHoraMovimento = dataHoraMovimento;
 	}
 
-	public TipoDeOperacao getOperacao() {
+	public TipoDeOperacaoEnum getOperacao() {
 		return operacao;
 	}
 
-	public void setOperacao(TipoDeOperacao operacao) {
+	public void setOperacao(TipoDeOperacaoEnum operacao) {
 		this.operacao = operacao;
 	}
 

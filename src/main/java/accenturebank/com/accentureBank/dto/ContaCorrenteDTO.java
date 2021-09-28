@@ -6,9 +6,9 @@ import accenturebank.com.accentureBank.domain.ContaCorrente;
 
 public class ContaCorrenteDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
+	private Long id;
 	private Long idAgencia;
-
 	private Long idCliente;
 
 	public ContaCorrenteDTO() {
@@ -16,9 +16,9 @@ public class ContaCorrenteDTO implements Serializable {
 	}
 
 	public ContaCorrenteDTO(ContaCorrente obj) {
-		super();
-		idAgencia = obj.getAgencia().getId();
-		idCliente = obj.getCliente().getId();
+		this.id = obj.getId();
+		this.idAgencia = obj.getAgencia().getId();
+		this.idCliente = obj.getCliente().getId();
 
 	}
 
@@ -38,5 +38,14 @@ public class ContaCorrenteDTO implements Serializable {
 		this.idCliente = idCliente;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	
 
 }
