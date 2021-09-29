@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import accenturebank.com.accentureBank.dto.AgenciaDTO;
+
 
 @Entity
 public class Agencia implements Serializable {
@@ -31,12 +33,19 @@ public class Agencia implements Serializable {
 	}
 
 	public Agencia(Long id, String nome, String endereco, String telefone) {
-		super();
 		this.id = id;
 		this.nome = nome;
 		this.endereco = endereco;
 		this.telefone = telefone;
 
+	}
+
+
+	public Agencia(AgenciaDTO agenciaDTO) {
+		this.id = agenciaDTO.getId() ;
+		this.nome = agenciaDTO.getNomeAgencia();
+		this.endereco = agenciaDTO.getEnderecoAgencia();
+		this.telefone = agenciaDTO.getFoneAgencia();
 	}
 
 	public Long getId() {

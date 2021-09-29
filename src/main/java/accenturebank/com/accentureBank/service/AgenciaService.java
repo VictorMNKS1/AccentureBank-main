@@ -19,12 +19,16 @@ public class AgenciaService {
 	@Autowired
 	AgenciaRepository agenciaRepository;
 
-	public Agencia getAgenciaById(long id) {
+	
+	
+	
+	public AgenciaDTO getAgenciaById(long id) {
 		Optional<Agencia> agenciaRetorno = agenciaRepository.findById(id);
 		if (agenciaRetorno.isEmpty()) {
 			throw new AgenciaNotFoundException("Agencia não encontrada");
 		}
-		return agenciaRetorno.get();
+		return new AgenciaDTO(agenciaRetorno.get());
+		
 	}
 
 	public List<Agencia> getAllAgencia() {

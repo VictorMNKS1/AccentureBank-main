@@ -31,9 +31,9 @@ public class AgenciaController {
 	}
 	
 	@GetMapping("/agencia/{id}")
-	public ResponseEntity<Agencia> getAgenciaById(@PathVariable("id") long id) {
+	public ResponseEntity<AgenciaDTO> getAgenciaById(@PathVariable("id") long id) {
 		try {
-			Agencia agencia = agenciaService.getAgenciaById(id);
+			AgenciaDTO agencia = agenciaService.getAgenciaById(id);
 			return new ResponseEntity<>(agencia, HttpStatus.OK);
 		} catch (AgenciaNotFoundException e) {
 			return new ResponseEntity<>(new ErrorModel(e.getMessage()), HttpStatus.NOT_FOUND);

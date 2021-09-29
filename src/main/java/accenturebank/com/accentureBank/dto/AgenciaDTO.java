@@ -2,12 +2,15 @@ package accenturebank.com.accentureBank.dto;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import accenturebank.com.accentureBank.domain.Agencia;
 
 public class AgenciaDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
+	@JsonProperty("nome")
 	private String nomeAgencia;
     private String enderecoAgencia;
     private String foneAgencia;

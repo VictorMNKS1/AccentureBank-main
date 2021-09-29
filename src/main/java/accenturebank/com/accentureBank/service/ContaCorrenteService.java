@@ -12,7 +12,9 @@ import accenturebank.com.accentureBank.domain.Agencia;
 import accenturebank.com.accentureBank.domain.Cliente;
 import accenturebank.com.accentureBank.domain.ContaCorrente;
 import accenturebank.com.accentureBank.domain.Extrato;
+import accenturebank.com.accentureBank.dto.AgenciaDTO;
 import accenturebank.com.accentureBank.dto.ContaCorrenteDTO;
+import accenturebank.com.accentureBank.entities.enums.TipoDeOperacaoEnum;
 import accenturebank.com.accentureBank.exceptions.AgenciaNotFoundException;
 import accenturebank.com.accentureBank.exceptions.ContaCorrenteNotFoundException;
 import accenturebank.com.accentureBank.repositories.AgenciaRepository;
@@ -64,14 +66,17 @@ public class ContaCorrenteService {
 	public String Saque(Long id, double valorSaque) throws ContaCorrenteNotFoundException {
 
 		// VALIDANDO SE A CONTA EXISTE
-		validate(id);
+		Optional<ContaCorrente> contaCorrenteReturn = contaCorrenteRepository.findById(id);
+		if (contaCorrenteReturn.isEmpty()) {
+			throw new ContaCorrenteNotFoundException("Conta Corrente não encontrada");
+	}
 
 		// PEGAR O SALDO DA CONTA E CALCULAR O SAQUE
 		double contaCorrenteSaldo = contaCorrenteRepository.findById(id).get().getContaCorrenteSaldo();
 		double resultadoSaque = contaCorrenteSaldo - valorSaque;
 
-		if (contaCorrenteSaldo >= valorSaque) {
-			operacaoContaCorrente(id, resultadoSaque, valorSaque, "Saque");
+		if ((contaCorrenteSaldo >= valorSaque) && (valorSaque > 0) ) {
+			operacaoContaCorrente(id, resultadoSaque, valorSaque, TipoDeOperacaoEnum.SAQUE);
 			return "Saque efetuado";
 		} else {
 			return "Saldo insuficiente";
@@ -82,52 +87,95 @@ public class ContaCorrenteService {
 	public String Depositar(Long id, double valorDeposito) throws ContaCorrenteNotFoundException {
 
 		// VALIDANDO SE A CONTA EXISTE
-		validate(id);
+		Optional<ContaCorrente> contaCorrenteReturn = contaCorrenteRepository.findById(id);
+		if (contaCorrenteReturn.isEmpty()) {
+			throw new ContaCorrenteNotFoundException("Conta Corrente não encontrada");
+	}
 		// PEGAR O SALDO DA CONTA E CALCULAR O DEPOSITO
 		double contaCorrenteSaldo = contaCorrenteRepository.findById(id).get().getContaCorrenteSaldo();
-		double resultadoDeposito = contaCorrenteSaldo - valorDeposito;
+		double resultadoDeposito = contaCorrenteSaldo + valorDeposito;
 
 		if (valorDeposito > 0) {
 			
 			//DEPOSITO NA CONTA
-			operacaoContaCorrente(id, resultadoDeposito, valorDeposito, "Depósito");
+			operacaoContaCorrente(id, resultadoDeposito, valorDeposito, TipoDeOperacaoEnum.DEPOSITO);
 			return "Deposito efetuado";
 		} else {
 			return "Valor invalido para deposito";
 		}
 
 	}
+	
+	 public String transferencia(long idContaInicial,long idContaDestino,double valorTransferencia) throws ContaCorrenteNotFoundException {
+
+	        //VALIDANDO SE A CONTA EXISTE
+	        Optional<ContaCorrente> contaCorrenteInicial = contaCorrenteRepository.findById(idContaInicial);
+	        Optional<ContaCorrente> contaCorrenteDestino = contaCorrenteRepository.findById(idContaDestino);
+	        if (contaCorrenteInicial.isEmpty() || contaCorrenteDestino.isEmpty()) {
+	            throw new ContaCorrenteNotFoundException("Conta Corrente não encontrada.");
+	        }
+
+	        if (valorTransferencia <= 0) {
+	            throw new ContaCorrenteNotFoundException("Valor inválido.");
+	        }
+
+	        //PEGANDO O SALDO DAS CONTAS
+	        
+	        double contaCorrenteInicialSaldo = contaCorrenteInicial.get().getContaCorrenteSaldo();
+	        double contaCorrenteDestinoSaldo = contaCorrenteDestino.get().getContaCorrenteSaldo();
+
+	        //CALCULOS DAS OPERAÇÕES
+	        
+	        double depositoContaCorrenteDestino = contaCorrenteDestinoSaldo + valorTransferencia;
+	        double saqueContaCorrenteInicial = contaCorrenteInicialSaldo - valorTransferencia;
+
+
+	        if (contaCorrenteInicialSaldo >= valorTransferencia) {
+	            //SAQUE NA CONTA INICIAL
+	            operacaoContaCorrente(idContaInicial, saqueContaCorrenteInicial, valorTransferencia, TipoDeOperacaoEnum.TRANSFERENCIA);
+
+	            //DEPOSITO NA CONTA DESTINO
+	            operacaoContaCorrente(idContaDestino, depositoContaCorrenteDestino, valorTransferencia, TipoDeOperacaoEnum.TRANSFERENCIA);
+
+	            return "Transferência efetuada";
+	        } else {
+	            return "Valor inválido para transferência";
+	        }
+	    }
 
 	public ContaCorrente saveOrUpdate(ContaCorrenteDTO contaCorrenteDTO) throws AgenciaNotFoundException {
 		Cliente clienteRetorno = clienteService.getClienteById(contaCorrenteDTO.getIdCliente());
-		Agencia agenciaRetorno = agenciaService.getAgenciaById(contaCorrenteDTO.getIdAgencia());
+		AgenciaDTO agenciaRetorno = agenciaService.getAgenciaById(contaCorrenteDTO.getIdAgencia());
 
 		Cliente cliente = new Cliente(contaCorrenteDTO.getIdCliente(), null, null, null);
 		Agencia agencia = new Agencia(contaCorrenteDTO.getIdAgencia(), null, null, null);
 
 		ContaCorrente contaCorrente = new ContaCorrente(null, agencia, gerarNumeroContaCorrente(), 0, cliente);
 		ContaCorrente contaCorrenteRetorno = contaCorrenteRepository.save(contaCorrente);
-
-		contaCorrenteRetorno.setAgencia(agenciaRetorno);
+		
+		
+		contaCorrenteRetorno.setAgencia(new Agencia(agenciaRetorno));
 		contaCorrenteRetorno.setCliente(clienteRetorno);
 
 		return contaCorrenteRetorno;
 
 	}
 
-	public void operacaoContaCorrente(long id, double resultadoOperacao, double valorOperacao, String operacao) {
+	public void operacaoContaCorrente(long id, double resultadoOperacao, double valorOperacao,TipoDeOperacaoEnum operacao) {
 		Long contaCorrenteId = contaCorrenteRepository.getById(id).getId();
 		Agencia agenciaContaCorrente = contaCorrenteRepository.getById(id).getAgencia();
 		String numeroContaCorrente = contaCorrenteRepository.getById(id).getContaCorrenteNumero();
 		Cliente clienteContaCorrente = contaCorrenteRepository.getById(id).getCliente();
+		
 
 		ContaCorrente contaCorrente = new ContaCorrente(contaCorrenteId, agenciaContaCorrente, numeroContaCorrente,
 				resultadoOperacao, clienteContaCorrente);
 
 		contaCorrenteRepository.save(contaCorrente);
-
+		
+		
 		LocalDateTime data = LocalDateTime.now();
-		Extrato extratoContaCorrente = new Extrato(null, data, null, contaCorrente);
+		Extrato extratoContaCorrente = new Extrato(null,data,operacao, contaCorrente);
 		extratoRepository.save(extratoContaCorrente);
 	}
 
@@ -142,9 +190,6 @@ public class ContaCorrenteService {
 		return numeroContaCorrente;
 	}
 	
-	public void validate(Long id) {
-		Optional<ContaCorrente> contaCorrenteReturn = contaCorrenteRepository.findById(id);
-		if (contaCorrenteReturn.isEmpty()) {
-			throw new ContaCorrenteNotFoundException("Conta Corrente não encontrada");
-	}
-}}
+
+		
+}

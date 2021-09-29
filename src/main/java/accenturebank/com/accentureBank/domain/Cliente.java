@@ -27,11 +27,6 @@ public class Cliente implements Serializable {
 	@Column
 	private String fone;
 	
-	//@ManyToOne
-    //@JoinColumn(name = "agencia_id")
-    //private Agencia agencia;
-	
-	
 	public Cliente() {
 	}
 

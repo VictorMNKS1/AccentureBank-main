@@ -1,7 +1,6 @@
 package accenturebank.com.accentureBank.entities.enums;
 
 
-
 public enum TipoDeOperacaoEnum {
 	
 	SAQUE(1, "Saque"), 
@@ -22,7 +21,7 @@ public enum TipoDeOperacaoEnum {
 	}
 
 	public String getDescricao() {
-		return descricao;
+		return this.descricao;
 	}
 
 	public static TipoDeOperacaoEnum toEnum(Integer cod) {
@@ -38,7 +37,11 @@ public enum TipoDeOperacaoEnum {
 
 		}
 		throw new IllegalArgumentException("Id invalido: " + cod);
-
+		
 	}
+	
+
+	
+	
 }
 
