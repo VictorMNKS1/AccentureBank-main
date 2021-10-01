@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import accenturebank.com.accentureBank.domain.Cliente;
@@ -50,5 +52,11 @@ public class ClienteController {
             return new ResponseEntity<>(cliente, HttpStatus.CREATED);
     }
 	
+	@PutMapping("/clientes")
+	private ResponseEntity<Cliente> updateCliente(@RequestBody ClienteDTO clienteDTO, @RequestParam("id") long id) 
+	{
+		Cliente cliente = clienteService.update(id, clienteDTO);
+		return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
+	}
 
 }

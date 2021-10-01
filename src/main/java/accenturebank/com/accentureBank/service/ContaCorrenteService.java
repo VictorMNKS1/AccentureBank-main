@@ -36,13 +36,11 @@ public class ContaCorrenteService implements OperacoesConta {
 	ExtratoRepository extratoRepository;
 	@Autowired
 	ExtratoService extratoContaCorrenteService;
-	
-
 
 	public List<ContaCorrente> getAllContasCorrentes() {
-        List<ContaCorrente> contasCorrentes = new ArrayList<ContaCorrente>();
-        contaCorrenteRepository.findAll().forEach(contaCorrente -> contasCorrentes.add(contaCorrente));
-        return contasCorrentes;
+		List<ContaCorrente> contasCorrentes = new ArrayList<ContaCorrente>();
+		contaCorrenteRepository.findAll().forEach(contaCorrente -> contasCorrentes.add(contaCorrente));
+		return contasCorrentes;
 	}
 
 	public ContaCorrente getIdContaCorrente(Long id) throws ContaCorrenteNotFoundException {
@@ -54,21 +52,21 @@ public class ContaCorrenteService implements OperacoesConta {
 		return contaCorrenteReturn.get();
 	}
 
-    public double getSaldoContaCorrenteByIdCliente(long id) throws ContaCorrenteNotFoundException {
-    	
-        // BUSCAR SALDO PELO PELO ID DO CLIENTE
-        ContaCorrente getSaldoContaCorrenteByIdCliente = getAllContasCorrentes().stream()
-                .filter(conta -> conta.getId() == id).findFirst().get();
+	public double getSaldoContaCorrenteByIdCliente(long id) throws ContaCorrenteNotFoundException {
 
-        double saldo = getSaldoContaCorrenteByIdCliente.getContaCorrenteSaldo();
+		// BUSCAR SALDO PELO PELO ID DO CLIENTE
+		ContaCorrente getSaldoContaCorrenteByIdCliente = getAllContasCorrentes().stream()
+				.filter(conta -> conta.getId() == id).findFirst().get();
 
-        return saldo;
-    }
+		double saldo = getSaldoContaCorrenteByIdCliente.getContaCorrenteSaldo();
+
+		return saldo;
+	}
 
 	public String sacar(Long id, double valorSaque) {
 
 		// VALIDANDO SE A CONTA EXISTE
-		 contaCorrenteRepository.findById(id);
+		contaCorrenteRepository.findById(id);
 
 		// PEGAR O SALDO DA CONTA E CALCULAR O SAQUE
 		double contaCorrenteSaldo = contaCorrenteRepository.findById(id).get().getContaCorrenteSaldo();
@@ -83,7 +81,7 @@ public class ContaCorrenteService implements OperacoesConta {
 
 	}
 
-	public String depositar(Long id, double valorDeposito){
+	public String depositar(Long id, double valorDeposito) {
 
 		// VALIDANDO SE A CONTA EXISTE
 		contaCorrenteRepository.findById(id);
@@ -108,7 +106,6 @@ public class ContaCorrenteService implements OperacoesConta {
 		// VALIDANDO SE A CONTA EXISTE
 		Optional<ContaCorrente> contaCorrenteInicial = contaCorrenteRepository.findById(idContaInicial);
 		Optional<ContaCorrente> contaCorrenteDestino = contaCorrenteRepository.findById(idContaDestino);
-
 
 		if (valorTransferencia <= 0) {
 			throw new ContaCorrenteNotFoundException("Valor inválido.");
@@ -169,9 +166,44 @@ public class ContaCorrenteService implements OperacoesConta {
 		contaCorrenteRepository.save(contaCorrente);
 
 		LocalDateTime data = LocalDateTime.now();
-		Extrato extratoContaCorrente = new Extrato(null,data, operacao, contaCorrente);
+		Extrato extratoContaCorrente = new Extrato(null, valorOperacao, data, operacao, contaCorrente);
 		extratoRepository.save(extratoContaCorrente);
 	}
+
+	public String recalcularSaldo(long id) {
+		double saldoAtual = this.getSaldoContaCorrenteByIdCliente(id);
+		List<Extrato> listExtrato = extratoContaCorrenteService.getAllExtratoporCliente(id);
+
+        double valorSaques = 0, valorDepositos = 0, valorTransferenciasRealizadas = 0;
+        double valorTotalExtrato = 0;
+        for (Extrato operacao : listExtrato) {
+            if (operacao.getOperacao().equals(TipoDeOperacaoEnum.SAQUE)) {
+                valorSaques = valorSaques + operacao.getValorOperacao();
+            }
+            if (operacao.getOperacao().equals(TipoDeOperacaoEnum.DEPOSITO)) {
+                valorDepositos = valorDepositos + operacao.getValorOperacao();
+            }
+            if (operacao.getOperacao().equals(TipoDeOperacaoEnum.TRANSFERENCIA)) {
+                valorTransferenciasRealizadas = valorTransferenciasRealizadas + operacao.getValorOperacao();
+            }
+
+        }
+        valorTotalExtrato = (valorDepositos + valorTransferenciasRealizadas) - (valorSaques);
+
+        // BUSCAR CONTA CORRENTE PELO ID DO CLIENTE
+     // buscar id da conta
+        ContaCorrente getContaCorrenteByIdCliente = getAllContasCorrentes().stream()
+                .filter(idconta -> idconta.getCliente().getId() == id).findFirst().get();
+        long contaId = getContaCorrenteByIdCliente.getId();
+
+        if (valorTotalExtrato == saldoAtual) {
+            return "O saldo está correto.";
+        } else {
+            this.getIdContaCorrente(contaId).setContaCorrenteSaldo(valorTotalExtrato);
+            contaCorrenteRepository.save(getContaCorrenteByIdCliente);
+            return "O seu saldo foi atualizado.";
+        }
+        }
 
 	public Boolean deleteContaCorrente(long id) throws ContaCorrenteNotFoundException {
 		contaCorrenteRepository.deleteById(id);
@@ -189,8 +221,5 @@ public class ContaCorrenteService implements OperacoesConta {
 		String numeroContaCorrente = Integer.toString(numero);
 		return numeroContaCorrente;
 	}
-
-
-	
 
 }

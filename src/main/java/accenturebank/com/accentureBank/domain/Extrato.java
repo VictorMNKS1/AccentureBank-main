@@ -24,11 +24,13 @@ public class Extrato implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", timezone = "GMT-3")
-	private LocalDateTime dataHoraMovimento;
-	
+	private double valorOperacao;
+
 	private TipoDeOperacaoEnum operacao;
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", timezone = "GMT-3")
+	private LocalDateTime dataHoraMovimento;
+
 	@ManyToOne
 	@JoinColumn(name = "conta_corrente_id")
 	private ContaCorrente contaCorrente;
@@ -37,9 +39,10 @@ public class Extrato implements Serializable {
 	public Extrato() {
 		}
 
-	public Extrato(Long id, LocalDateTime dataHoraMovimento, TipoDeOperacaoEnum operacao, ContaCorrente contaCorrente) {
+	public Extrato(Long id,double valorOperacao, LocalDateTime dataHoraMovimento, TipoDeOperacaoEnum operacao, ContaCorrente contaCorrente) {
 		super();
 		this.id = id;
+		this.valorOperacao = valorOperacao;
 		this.dataHoraMovimento = dataHoraMovimento;
 		this.operacao = operacao;
 		this.contaCorrente = contaCorrente;
@@ -75,6 +78,14 @@ public class Extrato implements Serializable {
 
 	public void setContaCorrente(ContaCorrente contaCorrente) {
 		this.contaCorrente = contaCorrente;
+	}
+
+	public double getValorOperacao() {
+		return valorOperacao;
+	}
+
+	public void setValorOperacao(double valorOperacao) {
+		this.valorOperacao = valorOperacao;
 	}
 
 	@Override
