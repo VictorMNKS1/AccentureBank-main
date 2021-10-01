@@ -49,6 +49,7 @@ public class ContaCorrente implements Serializable {
 		this.cliente = cliente;
 	}
 
+
 	public Long getId() {
 		return id;
 	}

@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import accenturebank.com.accentureBank.dto.ClienteDTO;
+
 
 @Entity
 public class Cliente implements Serializable {
@@ -31,13 +33,20 @@ public class Cliente implements Serializable {
 	}
 
 	public Cliente(Long id, String nome, String cpf, String fone) {
-		super();
 		this.id = id;
 		this.nome = nome;
 		this.cpf = cpf;
 		this.fone = fone;
 		
 	}
+	
+	public Cliente(ClienteDTO clienteDTO) {
+		this.id = clienteDTO.getId();
+		this.nome = clienteDTO.getNome();
+		this.cpf = clienteDTO.getCpf();
+		this.fone = clienteDTO.getFone();
+	}
+
 
 	public Long getId() {
 		return id;

@@ -22,14 +22,13 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 public class AgenciaController {
 	@Autowired
 	AgenciaService agenciaService;
-	
-	
+
 	@GetMapping("/agencias")
-	public ResponseEntity<List<Agencia>> getallAgencia(){
+	public ResponseEntity<List<Agencia>> getallAgencia() {
 		return new ResponseEntity<>(agenciaService.getAllAgencia(), HttpStatus.OK);
-		
+
 	}
-	
+
 	@GetMapping("/agencia/{id}")
 	public ResponseEntity<AgenciaDTO> getAgenciaById(@PathVariable("id") long id) {
 		try {
@@ -39,18 +38,18 @@ public class AgenciaController {
 			return new ResponseEntity<>(new ErrorModel(e.getMessage()), HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@PostMapping("/agencia")
-	
-	public ResponseEntity<Agencia> saveAgencia(@RequestBody AgenciaDTO agenciaDTO){
+
+	public ResponseEntity<Agencia> saveAgencia(@RequestBody AgenciaDTO agenciaDTO) {
 		try {
 			Agencia agencia = agenciaService.saveOrUpdate(agenciaDTO);
 			return new ResponseEntity<>(agencia, HttpStatus.OK);
-		}catch (CampoObrigatorioEmptyException e ) {
+		} catch (CampoObrigatorioEmptyException e) {
 			return new ResponseEntity<>(new ErrorModel(e.getMessage()), HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(new ErrorModel("Campo Obrigatorio Invalido"), HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 }

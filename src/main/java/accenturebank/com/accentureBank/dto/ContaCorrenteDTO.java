@@ -10,6 +10,9 @@ public class ContaCorrenteDTO implements Serializable {
 	private Long id;
 	private Long idAgencia;
 	private Long idCliente;
+	
+	
+	
 
 	public ContaCorrenteDTO() {
 
@@ -19,6 +22,7 @@ public class ContaCorrenteDTO implements Serializable {
 		this.id = obj.getId();
 		this.idAgencia = obj.getAgencia().getId();
 		this.idCliente = obj.getCliente().getId();
+		
 
 	}
 
@@ -45,7 +49,10 @@ public class ContaCorrenteDTO implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
+
+
+
 	
 
 }
