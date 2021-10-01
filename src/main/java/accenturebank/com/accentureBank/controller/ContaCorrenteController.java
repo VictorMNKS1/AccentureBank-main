@@ -1,4 +1,4 @@
-package accenturebank.com.accentureBank.controller;
+	package accenturebank.com.accentureBank.controller;
 
 import java.util.List;
 
@@ -44,17 +44,17 @@ public class ContaCorrenteController {
 	@PostMapping("/contacorrente")
 	public ResponseEntity<ContaCorrente> saveContaCorrente(@RequestBody ContaCorrenteDTO contaCorrenteDTO) {
 
-			ContaCorrente contaCorrente = contaCorrenteService.saveOrUpdate(contaCorrenteDTO);
+			ContaCorrente contaCorrente = contaCorrenteService.save(contaCorrenteDTO);
 			return new ResponseEntity<>(contaCorrente, HttpStatus.CREATED);
 
 	}
 
 	@PutMapping("/contacorrente/deposito")
-	public ResponseEntity<String> Depositar(@RequestParam("id") long id, @RequestParam("valor") double valor) {
+	public ResponseEntity<String> depositar(@RequestParam("id") long id, @RequestParam("valor") double valor) {
 			
 			contaCorrenteService.getIdContaCorrente(id);
 
-			String Depositar = contaCorrenteService.Depositar(id, valor);
+			String Depositar = contaCorrenteService.depositar(id, valor);
 			return new ResponseEntity<String>(Depositar, HttpStatus.OK);
 
 	}
@@ -64,7 +64,7 @@ public class ContaCorrenteController {
 		
 			contaCorrenteService.getIdContaCorrente(id);
 		
-			String sacar = contaCorrenteService.Saque(id, valor);
+			String sacar = contaCorrenteService.sacar(id, valor);
 			return new ResponseEntity<>(sacar, HttpStatus.OK);
 			
 	}
@@ -73,7 +73,7 @@ public class ContaCorrenteController {
 	public ResponseEntity<String> transferir(@RequestParam("idContaInicial") long idContaInicial,@RequestParam("idContaDestino") long idContaDestino,@RequestParam("valorTransferencia") double valorTransferencia) {
 			contaCorrenteService.getIdContaCorrente(idContaInicial);
 	
-			String transferir = contaCorrenteService.transferencia(idContaInicial, idContaDestino, valorTransferencia);
+			String transferir = contaCorrenteService.transferir(idContaInicial, idContaDestino, valorTransferencia);
 			return new ResponseEntity<>(transferir, HttpStatus.OK);
 	
 	}

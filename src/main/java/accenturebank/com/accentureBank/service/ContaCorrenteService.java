@@ -17,12 +17,13 @@ import accenturebank.com.accentureBank.dto.ContaCorrenteDTO;
 import accenturebank.com.accentureBank.entities.enums.TipoDeOperacaoEnum;
 import accenturebank.com.accentureBank.exceptions.AgenciaNotFoundException;
 import accenturebank.com.accentureBank.exceptions.ContaCorrenteNotFoundException;
+import accenturebank.com.accentureBank.interfaces.OperacoesConta;
 import accenturebank.com.accentureBank.repositories.AgenciaRepository;
 import accenturebank.com.accentureBank.repositories.ContaCorrenteRepository;
 import accenturebank.com.accentureBank.repositories.ExtratoRepository;
 
 @Service
-public class ContaCorrenteService {
+public class ContaCorrenteService implements OperacoesConta {
 	@Autowired
 	ContaCorrenteRepository contaCorrenteRepository;
 	@Autowired
@@ -55,7 +56,7 @@ public class ContaCorrenteService {
 
     public double getSaldoContaCorrenteByIdCliente(long id) throws ContaCorrenteNotFoundException {
     	
-        // buscar saldo da conta por id cliente
+        // BUSCAR SALDO PELO PELO ID DO CLIENTE
         ContaCorrente getSaldoContaCorrenteByIdCliente = getAllContasCorrentes().stream()
                 .filter(conta -> conta.getId() == id).findFirst().get();
 
@@ -64,7 +65,7 @@ public class ContaCorrenteService {
         return saldo;
     }
 
-	public String Saque(Long id, double valorSaque) throws ContaCorrenteNotFoundException {
+	public String sacar(Long id, double valorSaque) {
 
 		// VALIDANDO SE A CONTA EXISTE
 		 contaCorrenteRepository.findById(id);
@@ -82,7 +83,7 @@ public class ContaCorrenteService {
 
 	}
 
-	public String Depositar(Long id, double valorDeposito) throws ContaCorrenteNotFoundException {
+	public String depositar(Long id, double valorDeposito){
 
 		// VALIDANDO SE A CONTA EXISTE
 		contaCorrenteRepository.findById(id);
@@ -102,8 +103,7 @@ public class ContaCorrenteService {
 
 	}
 
-	public String transferencia(long idContaInicial, long idContaDestino, double valorTransferencia)
-			throws ContaCorrenteNotFoundException {
+	public String transferir(long idContaInicial, long idContaDestino, double valorTransferencia) {
 
 		// VALIDANDO SE A CONTA EXISTE
 		Optional<ContaCorrente> contaCorrenteInicial = contaCorrenteRepository.findById(idContaInicial);
@@ -139,7 +139,7 @@ public class ContaCorrenteService {
 		}
 	}
 
-	public ContaCorrente saveOrUpdate(ContaCorrenteDTO contaCorrenteDTO) throws AgenciaNotFoundException {
+	public ContaCorrente save(ContaCorrenteDTO contaCorrenteDTO) throws AgenciaNotFoundException {
 		Cliente clienteRetorno = clienteService.getClienteById(contaCorrenteDTO.getIdCliente());
 		AgenciaDTO agenciaRetorno = agenciaService.getAgenciaById(contaCorrenteDTO.getIdAgencia());
 
@@ -169,7 +169,7 @@ public class ContaCorrenteService {
 		contaCorrenteRepository.save(contaCorrente);
 
 		LocalDateTime data = LocalDateTime.now();
-		Extrato extratoContaCorrente = new Extrato(null, data, operacao, contaCorrente);
+		Extrato extratoContaCorrente = new Extrato(null,data, operacao, contaCorrente);
 		extratoRepository.save(extratoContaCorrente);
 	}
 
@@ -189,6 +189,8 @@ public class ContaCorrenteService {
 		String numeroContaCorrente = Integer.toString(numero);
 		return numeroContaCorrente;
 	}
+
+
 	
 
 }

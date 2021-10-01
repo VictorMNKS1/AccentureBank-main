@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import accenturebank.com.accentureBank.domain.Extrato;
-import accenturebank.com.accentureBank.exceptions.ContaCorrenteNotFoundException;
-import accenturebank.com.accentureBank.exceptions.ErrorModel;
 import accenturebank.com.accentureBank.service.ExtratoService;
 
 @RestController
@@ -27,16 +25,10 @@ public class ExtratoController {
 	
 	@GetMapping("/extrato/{id}")
     public ResponseEntity<List<Extrato>> getAllExtratoById(@PathVariable("id") long id) {
-        try {
             List<Extrato> extratoContaCorrente = extratoService.getAllExtratoporCliente(id);
             return new ResponseEntity<>(extratoContaCorrente, HttpStatus.OK);
-        } catch (ContaCorrenteNotFoundException e) {
-            return new ResponseEntity<List<Extrato>>(new ErrorModel(e.getMessage()), HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<List<Extrato>>(new ErrorModel("Campo Inválido"), HttpStatus.NOT_FOUND);
-        }
-    }
+
 	
 	
-}
+}}
     

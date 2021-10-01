@@ -17,10 +17,10 @@ public class ClienteDTO implements Serializable {
 	}
 
 	public ClienteDTO(Cliente obj) {
-		id = obj.getId();
-		nome = obj.getNome();
-		cpf = obj.getCpf();
-		fone = obj.getFone();
+		this.id = obj.getId();
+		this.nome = obj.getNome();
+		this.cpf = obj.getCpf();
+		this.fone = obj.getFone();
 	}
 
 	public Long getId() {

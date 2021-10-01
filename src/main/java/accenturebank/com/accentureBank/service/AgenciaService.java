@@ -22,7 +22,7 @@ public class AgenciaService {
 	public AgenciaDTO getAgenciaById(long id) {
 		Optional<Agencia> agenciaRetorno = agenciaRepository.findById(id);
 		if (agenciaRetorno.isEmpty()) {
-			throw new AgenciaNotFoundException("Agencia não encontrada");
+			throw new AgenciaNotFoundException("AGENCIA NÃO ENCONTRADA");
 		}
 		return new AgenciaDTO(agenciaRetorno.get());
 

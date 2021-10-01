@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import accenturebank.com.accentureBank.domain.Agencia;
 import accenturebank.com.accentureBank.dto.AgenciaDTO;
-import accenturebank.com.accentureBank.exceptions.AgenciaNotFoundException;
-import accenturebank.com.accentureBank.exceptions.CampoObrigatorioEmptyException;
-import accenturebank.com.accentureBank.exceptions.ErrorModel;
 import accenturebank.com.accentureBank.service.AgenciaService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
@@ -31,25 +28,16 @@ public class AgenciaController {
 
 	@GetMapping("/agencia/{id}")
 	public ResponseEntity<AgenciaDTO> getAgenciaById(@PathVariable("id") long id) {
-		try {
 			AgenciaDTO agencia = agenciaService.getAgenciaById(id);
 			return new ResponseEntity<>(agencia, HttpStatus.OK);
-		} catch (AgenciaNotFoundException e) {
-			return new ResponseEntity<>(new ErrorModel(e.getMessage()), HttpStatus.NOT_FOUND);
-		}
+
 	}
 
 	@PostMapping("/agencia")
-
 	public ResponseEntity<Agencia> saveAgencia(@RequestBody AgenciaDTO agenciaDTO) {
-		try {
 			Agencia agencia = agenciaService.saveOrUpdate(agenciaDTO);
 			return new ResponseEntity<>(agencia, HttpStatus.OK);
-		} catch (CampoObrigatorioEmptyException e) {
-			return new ResponseEntity<>(new ErrorModel(e.getMessage()), HttpStatus.NOT_FOUND);
-		} catch (Exception e) {
-			return new ResponseEntity<>(new ErrorModel("Campo Obrigatorio Invalido"), HttpStatus.NOT_FOUND);
-		}
+
 	}
 
 }

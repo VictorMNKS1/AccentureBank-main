@@ -11,24 +11,23 @@ import javax.persistence.Id;
 
 import accenturebank.com.accentureBank.dto.ClienteDTO;
 
-
 @Entity
 public class Cliente implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column
 	private String nome;
-	
+
 	@Column
 	private String cpf;
-	
+
 	@Column
 	private String fone;
-	
+
 	public Cliente() {
 	}
 
@@ -37,16 +36,15 @@ public class Cliente implements Serializable {
 		this.nome = nome;
 		this.cpf = cpf;
 		this.fone = fone;
-		
+
 	}
-	
+
 	public Cliente(ClienteDTO clienteDTO) {
 		this.id = clienteDTO.getId();
 		this.nome = clienteDTO.getNome();
 		this.cpf = clienteDTO.getCpf();
 		this.fone = clienteDTO.getFone();
 	}
-
 
 	public Long getId() {
 		return id;
@@ -84,7 +82,6 @@ public class Cliente implements Serializable {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
-		
 
 	@Override
 	public boolean equals(Object obj) {
@@ -98,6 +95,4 @@ public class Cliente implements Serializable {
 		return Objects.equals(id, other.id);
 	}
 
-
-	
 }
