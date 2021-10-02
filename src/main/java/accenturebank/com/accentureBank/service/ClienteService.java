@@ -1,18 +1,21 @@
 package accenturebank.com.accentureBank.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import accenturebank.com.accentureBank.domain.Cliente;
-import accenturebank.com.accentureBank.dto.ClienteDTO;
 import accenturebank.com.accentureBank.exceptions.CampoObrigatorioEmptyException;
 import accenturebank.com.accentureBank.exceptions.ClienteNotFoundException;
+import accenturebank.com.accentureBank.exceptions.CpfInvalidoException;
+import accenturebank.com.accentureBank.exceptions.DatabaseException;
+import accenturebank.com.accentureBank.exceptions.ValidaCPF;
 import accenturebank.com.accentureBank.repositories.ClienteRepository;
 
 @Service
@@ -23,12 +26,19 @@ public class ClienteService {
 	@Autowired
 	AgenciaService agenciaService;
 
-	private void validate(ClienteDTO cliente) {
+	ValidaCPF validaCPF = new ValidaCPF();
+
+	private void validate(Cliente cliente) {
+	String cpf= cliente.getCpf();
+		
 		if (cliente.getNome() == null || cliente.getNome().isEmpty()) {
 			throw new CampoObrigatorioEmptyException("O campo nome é obrigatorio");
 		}
 		if (cliente.getCpf() == null || cliente.getCpf().isEmpty()) {
 			throw new CampoObrigatorioEmptyException("O campo cpf é obrigatorio");
+		}
+		if (!validaCPF.isCPF(cpf)) {
+			throw new CpfInvalidoException("CPF invalido");
 		}
 		if (cliente.getFone() == null || cliente.getFone().isEmpty()) {
 			throw new CampoObrigatorioEmptyException("o campo fone é obrigatorio");
@@ -38,52 +48,51 @@ public class ClienteService {
 
 	// RETORNA TODOS OS CLIENTE
 	public List<Cliente> getAllCliente() {
-		List<Cliente> clientes = new ArrayList<Cliente>();
-		clienteRepository.findAll().forEach(cliente -> clientes.add(cliente));
-		return clientes;
+		return clienteRepository.findAll();
 	}
 
 	// RETORNA O CLIENTE PELO O ID
 	public Cliente getClienteById(long id) {
-		Optional<Cliente> clienteRetorno = clienteRepository.findById(id);
-		if (clienteRetorno.isEmpty()) {
-			throw new ClienteNotFoundException("CLIENTE NÃO ENCONTRADO");
-		}
-		return clienteRetorno.get();
+		Optional<Cliente> obj = clienteRepository.findById(id);
+		return obj.orElseThrow(() -> new ClienteNotFoundException(id));
 	}
+	
 
 	// CRIA UM NOVO CLIENTE
-	public Cliente save(ClienteDTO clienteDTO) {
-		Cliente cliente = new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getCpf(),
-				clienteDTO.getFone());
-
-		validate(clienteDTO);
-		Cliente clienteRetorno = clienteRepository.save(cliente);
-
-		return clienteRetorno;
+	public Cliente save(Cliente obj) {
+		validate(obj);
+		return clienteRepository.save(obj);
+	
 	}
 
 	// DELETA UM CLIENTE PELO ID
-	public Boolean delete(long id) {
-		clienteRepository.deleteById(id);
-		return true;
+	public void delete(long id) {	
+		try {
+			clienteRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ClienteNotFoundException(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
 
 	}
 
-	public Cliente update(long id, ClienteDTO clientee) {
-		validate(clientee);
+	public Cliente update(long id, Cliente obj) {
+		validate(obj);
 		try {
 			Cliente cliente = clienteRepository.getById(id);
-			updateData(cliente, clientee);
+			updateData(cliente, obj);
 			return clienteRepository.save(cliente);
 		} catch (EntityNotFoundException e) {
 			throw new ClienteNotFoundException("Cliente nÃ£o encontrado");
 		}
 	}
 
-	private void updateData(Cliente cliente, ClienteDTO novo) {
-		cliente.setNome(novo.getNome());
-		cliente.setCpf(novo.getCpf());
-		cliente.setFone(novo.getFone());
+	private void updateData(Cliente cliente, Cliente obj) {
+		cliente.setNome(obj.getNome());
+		cliente.setCpf(obj.getCpf());
+		cliente.setFone(obj.getFone());
 	}
+	
+
 }

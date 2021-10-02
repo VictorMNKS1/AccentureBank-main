@@ -3,7 +3,6 @@ package accenturebank.com.accentureBank.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,15 +19,14 @@ public class ExtratoController {
 	
 	@GetMapping("/extrato")
     public ResponseEntity<List<Extrato>> getAllExtrato() {
-        return new ResponseEntity<>(extratoService.getAllExtrato(), HttpStatus.OK);
+		List<Extrato> list = extratoService.getAllExtrato();
+		return ResponseEntity.ok().body(list);
     }
 	
 	@GetMapping("/extrato/{id}")
     public ResponseEntity<List<Extrato>> getAllExtratoById(@PathVariable("id") long id) {
-            List<Extrato> extratoContaCorrente = extratoService.getAllExtratoporCliente(id);
-            return new ResponseEntity<>(extratoContaCorrente, HttpStatus.OK);
-
-	
+			List<Extrato> obj = extratoService.getAllExtratoporCliente(id);
+    		return ResponseEntity.ok().body(obj);
 	
 }}
     

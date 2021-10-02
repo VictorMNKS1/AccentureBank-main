@@ -47,6 +47,13 @@ public class Agencia implements Serializable {
 		this.endereco = agenciaDTO.getEnderecoAgencia();
 		this.telefone = agenciaDTO.getFoneAgencia();
 	}
+	
+	
+
+	public Agencia(Long id) {
+		super();
+		this.id = id;
+	}
 
 	public Long getId() {
 		return id;

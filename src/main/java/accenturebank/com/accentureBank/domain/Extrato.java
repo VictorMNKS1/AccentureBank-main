@@ -28,6 +28,8 @@ public class Extrato implements Serializable {
 
 	private TipoDeOperacaoEnum operacao;
 	
+	private double saldo;
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", timezone = "GMT-3")
 	private LocalDateTime dataHoraMovimento;
 
@@ -39,12 +41,24 @@ public class Extrato implements Serializable {
 	public Extrato() {
 		}
 
-	public Extrato(Long id,double valorOperacao, LocalDateTime dataHoraMovimento, TipoDeOperacaoEnum operacao, ContaCorrente contaCorrente) {
+	public Extrato(Long id,double valorOperacao,double saldo, LocalDateTime dataHoraMovimento, TipoDeOperacaoEnum operacao, ContaCorrente contaCorrente) {
 		super();
 		this.id = id;
 		this.valorOperacao = valorOperacao;
+		this.saldo = saldo;
 		this.dataHoraMovimento = dataHoraMovimento;
 		this.operacao = operacao;
+		this.contaCorrente = contaCorrente;
+	}
+
+
+	public Extrato(double valorOperacao, TipoDeOperacaoEnum operacao, double saldo, LocalDateTime dataHoraMovimento,
+			ContaCorrente contaCorrente) {
+		super();
+		this.valorOperacao = valorOperacao;
+		this.operacao = operacao;
+		this.saldo = saldo;
+		this.dataHoraMovimento = dataHoraMovimento;
 		this.contaCorrente = contaCorrente;
 	}
 
@@ -86,6 +100,14 @@ public class Extrato implements Serializable {
 
 	public void setValorOperacao(double valorOperacao) {
 		this.valorOperacao = valorOperacao;
+	}
+
+	public double getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(double saldo) {
+		this.saldo = saldo;
 	}
 
 	@Override

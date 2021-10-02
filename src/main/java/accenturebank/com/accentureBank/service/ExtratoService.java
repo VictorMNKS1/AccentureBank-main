@@ -1,7 +1,7 @@
 package accenturebank.com.accentureBank.service;
 
-import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +25,8 @@ public class ExtratoService {
 	ContaCorrenteRepository contaCorrenteRepository;
 
 	public List<Extrato> getAllExtrato() {
-		List<Extrato> extratoContaCorrente = new ArrayList<Extrato>();
-		extratoRepository.findAll().forEach(extrato -> extratoContaCorrente.add(extrato));
-		return extratoContaCorrente;
+		return extratoRepository.findAll();
+
 	}
 
 	public List<Extrato> getAllExtratoporCliente(Long id) throws ContaCorrenteNotFoundException {
@@ -35,12 +34,10 @@ public class ExtratoService {
 		ContaCorrente contaCorrente = contaCorrenteService.getContaCorrenteByCliente(cliente);
 		List<Extrato> extratoContaCorrenteId = extratoRepository.findByContaCorrente(contaCorrente);
 
-        if (extratoContaCorrenteId.isEmpty()) {
-            throw new ContaCorrenteNotFoundException("Extrato vazio.");
-        }
-        return extratoContaCorrenteId;
-    }
-		
-	
-	
+		if (extratoContaCorrenteId.isEmpty() || extratoContaCorrenteId == null) {
+			throw new ContaCorrenteNotFoundException("Extrato vazio.");
+		}
+		return extratoContaCorrenteId;
+	}
+
 }

@@ -9,8 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import accenturebank.com.accentureBank.dto.ClienteDTO;
 
+@JsonSerialize
 @Entity
 public class Cliente implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,6 +26,7 @@ public class Cliente implements Serializable {
 	private String nome;
 
 	@Column
+
 	private String cpf;
 
 	@Column
@@ -44,6 +48,12 @@ public class Cliente implements Serializable {
 		this.nome = clienteDTO.getNome();
 		this.cpf = clienteDTO.getCpf();
 		this.fone = clienteDTO.getFone();
+	}
+
+
+	public Cliente(Long id) {
+		super();
+		this.id = id;
 	}
 
 	public Long getId() {

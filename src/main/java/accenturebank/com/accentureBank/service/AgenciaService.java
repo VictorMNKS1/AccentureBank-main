@@ -1,6 +1,5 @@
 package accenturebank.com.accentureBank.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import accenturebank.com.accentureBank.domain.Agencia;
-import accenturebank.com.accentureBank.dto.AgenciaDTO;
 import accenturebank.com.accentureBank.exceptions.AgenciaNotFoundException;
 import accenturebank.com.accentureBank.exceptions.CampoObrigatorioEmptyException;
 import accenturebank.com.accentureBank.repositories.AgenciaRepository;
@@ -19,35 +17,34 @@ public class AgenciaService {
 	@Autowired
 	AgenciaRepository agenciaRepository;
 
-	public AgenciaDTO getAgenciaById(long id) {
-		Optional<Agencia> agenciaRetorno = agenciaRepository.findById(id);
-		if (agenciaRetorno.isEmpty()) {
-			throw new AgenciaNotFoundException("AGENCIA NÃO ENCONTRADA");
-		}
-		return new AgenciaDTO(agenciaRetorno.get());
-
-	}
-
 	public List<Agencia> getAllAgencia() {
-		List<Agencia> agencias = new ArrayList<>();
-		agenciaRepository.findAll().forEach(agencia -> agencias.add(agencia));
+		return agenciaRepository.findAll();
 
-		return agencias;
 	}
 
-	public Agencia saveOrUpdate(AgenciaDTO agenciaDTO) throws CampoObrigatorioEmptyException {
-		Agencia agencia = new Agencia(null, agenciaDTO.getNomeAgencia(), agenciaDTO.getEnderecoAgencia(),
-				agenciaDTO.getFoneAgencia());
+	public Agencia getAgenciaById(long id) {
+		Optional<Agencia> obj = agenciaRepository.findById(id);
+		return obj.orElseThrow(() -> new AgenciaNotFoundException(id));
+	}
 
-		if (agenciaDTO.getNomeAgencia().isEmpty() || agenciaDTO.getEnderecoAgencia().isEmpty()
-				|| agenciaDTO.getFoneAgencia().isEmpty()) {
-			throw new CampoObrigatorioEmptyException("Campo obrigatório vazio.");
+	public Agencia save(Agencia obj) throws CampoObrigatorioEmptyException {
+		validate(obj);
+		return agenciaRepository.save(obj);
+
+	}
+
+	private void validate(Agencia agencia) {
+
+		if (agencia.getNome() == null || agencia.getNome().isEmpty()) {
+			throw new CampoObrigatorioEmptyException("O campo nome é obrigatorio");
+		}
+		if (agencia.getEndereco() == null || agencia.getEndereco().isEmpty()) {
+			throw new CampoObrigatorioEmptyException("O campo endereco é obrigatorio");
 		}
 
-		agencia = agenciaRepository.save(agencia);
-
-		return agencia;
-
+		if (agencia.getTelefone() == null || agencia.getTelefone().isEmpty()) {
+			throw new CampoObrigatorioEmptyException("o campo fone é obrigatorio");
+		}
 	}
 
 }
