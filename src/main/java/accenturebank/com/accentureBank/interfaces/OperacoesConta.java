@@ -7,12 +7,12 @@ public interface OperacoesConta {
 	* PRINCIPAIS DE UMA CONTA 
 	*/
 	
-	public String sacar(Long id, double valorSaque);
+	public Double sacar(Long id, double valorSaque);
 
 
-	public String depositar(Long id, double valorDeposito);
+	public Double depositar(Long id, double valorDeposito);
 		
 	
-	public String transferir(long idContaInicial, long idContaDestino, double valorTransferencia);
+	public Double transferir(long idContaInicial, long idContaDestino, double valorTransferencia);
 	
 }

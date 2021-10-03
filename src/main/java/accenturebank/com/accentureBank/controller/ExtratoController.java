@@ -17,7 +17,7 @@ public class ExtratoController {
 	@Autowired
 	ExtratoService extratoService;
 	
-	@GetMapping("/extrato")
+	@GetMapping("/extratos")
     public ResponseEntity<List<Extrato>> getAllExtrato() {
 		List<Extrato> list = extratoService.getAllExtrato();
 		return ResponseEntity.ok().body(list);
@@ -28,5 +28,6 @@ public class ExtratoController {
 			List<Extrato> obj = extratoService.getAllExtratoporCliente(id);
     		return ResponseEntity.ok().body(obj);
 	
-}}
+}
+	}
     

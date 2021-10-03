@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -18,7 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import accenturebank.com.accentureBank.domain.ContaCorrente;
 import accenturebank.com.accentureBank.dto.ContaCorrenteDTO;
 import accenturebank.com.accentureBank.service.ContaCorrenteService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
 
 @RestController
 public class ContaCorrenteController {
@@ -49,29 +50,29 @@ public class ContaCorrenteController {
 	}
 
 	@PutMapping("/contacorrente/deposito")
-	public ResponseEntity<String> depositar(@RequestParam("id") long id, @RequestParam("valor") double valor) {
+	public ResponseEntity<Double> depositar(@RequestParam("id") long id, @RequestParam("valor") double valor) {
 
 		contaCorrenteService.getContaCorrenteById(id);
-		String depositar = contaCorrenteService.depositar(id, valor);
+		Double depositar = contaCorrenteService.depositar(id, valor);
 		return ResponseEntity.ok().body(depositar);
 
 	}
 
 	@PutMapping("/contacorrente/sacar")
-	public ResponseEntity<String> sacar(@RequestParam("id") long id, @RequestParam("valor") double valor) {
+	public ResponseEntity<Double> sacar(@RequestParam("id") long id, @RequestParam("valor") double valor) {
 
 		contaCorrenteService.getContaCorrenteById(id);
 
-		String sacar = contaCorrenteService.sacar(id, valor);
+		Double sacar = contaCorrenteService.sacar(id, valor);
 		return ResponseEntity.ok().body(sacar);
 
 	}
 
 	@PutMapping("/contacorrente/transferir")
-	public ResponseEntity<String> transferir(@RequestParam("idContaInicial") long idContaInicial,@RequestParam("idContaDestino") long idContaDestino, @RequestParam("valorTransferencia") double valorTransferencia) {
+	public ResponseEntity<Double> transferir(@RequestParam("idContaInicial") long idContaInicial,@RequestParam("idContaDestino") long idContaDestino, @RequestParam("valorTransferencia") double valorTransferencia) {
 		contaCorrenteService.getContaCorrenteById(idContaInicial);
 
-		String transferir = contaCorrenteService.transferir(idContaInicial, idContaDestino, valorTransferencia);
+		Double transferir = contaCorrenteService.transferir(idContaInicial, idContaDestino, valorTransferencia);
 		return ResponseEntity.ok().body(transferir);
 
 	}
@@ -86,8 +87,8 @@ public class ContaCorrenteController {
 	}
 
 	@GetMapping("/recalcularsaldocontacorrente/{id}")
-	public ResponseEntity<String> recalcularSaldo(@PathVariable("id") long id) {
-		return new ResponseEntity<String>(contaCorrenteService.recalcularSaldo(id), HttpStatus.OK);
+	public ResponseEntity<Double> recalcularSaldo(@PathVariable("id") long id) {
+		return new ResponseEntity<Double>(contaCorrenteService.recalcularSaldo(id), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/contacorrente/{id}")

@@ -26,7 +26,6 @@ public class ExtratoService {
 
 	public List<Extrato> getAllExtrato() {
 		return extratoRepository.findAll();
-
 	}
 
 	public List<Extrato> getAllExtratoporCliente(Long id) throws ContaCorrenteNotFoundException {

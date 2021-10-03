@@ -16,6 +16,7 @@ import accenturebank.com.accentureBank.entities.enums.TipoDeOperacaoEnum;
 import accenturebank.com.accentureBank.exceptions.AgenciaNotFoundException;
 import accenturebank.com.accentureBank.exceptions.CampoObrigatorioEmptyException;
 import accenturebank.com.accentureBank.exceptions.ContaCorrenteNotFoundException;
+import accenturebank.com.accentureBank.exceptions.SaldoInsuficienteException;
 import accenturebank.com.accentureBank.interfaces.OperacoesConta;
 import accenturebank.com.accentureBank.repositories.AgenciaRepository;
 import accenturebank.com.accentureBank.repositories.ContaCorrenteRepository;
@@ -54,7 +55,7 @@ public class ContaCorrenteService implements OperacoesConta {
 		return saldo;
 	}
 
-	public String sacar(Long id, double valorSaque) {
+	public Double sacar(Long id, double valorSaque) {
 
 		// VALIDANDO SE A CONTA EXISTE
 		contaCorrenteRepository.findById(id);
@@ -65,14 +66,15 @@ public class ContaCorrenteService implements OperacoesConta {
 
 		if ((contaCorrenteSaldo >= valorSaque) && (valorSaque > 0)) {
 			operacaoContaCorrente(id, resultadoSaque, valorSaque, TipoDeOperacaoEnum.SAQUE);
-			return "Saque efetuado";
+			return valorSaque;
 		} else {
-			return "Saldo insuficiente";
+			throw new SaldoInsuficienteException("Saldo insuficiente para saque");
 		}
+
 
 	}
 
-	public String depositar(Long id, double valorDeposito) {
+	public Double depositar(Long id, double valorDeposito) {
 
 		// VALIDANDO SE A CONTA EXISTE
 		contaCorrenteRepository.findById(id);
@@ -81,18 +83,20 @@ public class ContaCorrenteService implements OperacoesConta {
 		double contaCorrenteSaldo = contaCorrenteRepository.findById(id).get().getContaCorrenteSaldo();
 		double resultadoDeposito = contaCorrenteSaldo + valorDeposito;
 
-		if (valorDeposito > 0) {
+
 
 			// DEPOSITO NA CONTA
 			operacaoContaCorrente(id, resultadoDeposito, valorDeposito, TipoDeOperacaoEnum.DEPOSITO);
-			return "Deposito efetuado";
-		} else {
-			return "Valor invalido para deposito";
-		}
+			if (valorDeposito > 0) {
+				throw new SaldoInsuficienteException("O valor de deposito tem que ser maior que 1");
+			}
+			// DEPOSITO NA CONTA
+			operacaoContaCorrente(id, resultadoDeposito, valorDeposito, TipoDeOperacaoEnum.DEPOSITO);
+			return valorDeposito;
 
 	}
 
-	public String transferir(long idContaInicial, long idContaDestino, double valorTransferencia) {
+	public Double transferir(long idContaInicial, long idContaDestino, double valorTransferencia) {
 
 		// VALIDANDO SE A CONTA EXISTE
 		Optional<ContaCorrente> contaCorrenteInicial = contaCorrenteRepository.findById(idContaInicial);
@@ -122,11 +126,12 @@ public class ContaCorrenteService implements OperacoesConta {
 			operacaoContaCorrente(idContaDestino, depositoContaCorrenteDestino, valorTransferencia,
 					TipoDeOperacaoEnum.TRANSFERENCIA);
 
-			return "Transferência efetuada";
+			return valorTransferencia;
 		} else {
-			return "Valor inválido para transferência";
+			throw new SaldoInsuficienteException("Saldo em conta inferior a valor de transferência");
 		}
 	}
+	
 
 	public ContaCorrente save(ContaCorrenteDTO contaCorrenteDTO) throws AgenciaNotFoundException {
 		
@@ -166,7 +171,7 @@ public class ContaCorrenteService implements OperacoesConta {
 		extratoRepository.save(extratoContaCorrente);
 	}
 
-	public String recalcularSaldo(long id) {
+	public Double recalcularSaldo(long id) {
 		double saldoAtual = this.getSaldoContaCorrenteByIdCliente(id);
 		List<Extrato> listExtrato = extratoContaCorrenteService.getAllExtratoporCliente(id);
 
@@ -193,11 +198,11 @@ public class ContaCorrenteService implements OperacoesConta {
 		long contaId = getContaCorrenteByIdCliente.getId();
 
 		if (valorTotalExtrato == saldoAtual) {
-			return "O saldo está correto.";
+			return saldoAtual;
 		} else {
 			this.getContaCorrenteById(contaId).setContaCorrenteSaldo(valorTotalExtrato);
 			contaCorrenteRepository.save(getContaCorrenteByIdCliente);
-			return "O seu saldo foi atualizado.";
+			return (double) 0;
 		}
 	}
 
