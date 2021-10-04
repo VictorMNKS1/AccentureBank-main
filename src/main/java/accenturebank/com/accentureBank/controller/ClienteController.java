@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -51,10 +50,10 @@ public class ClienteController {
 		return ResponseEntity.created(uri).body(obj);
 	}
 
-	@PutMapping("/clientes")
-	private ResponseEntity<Cliente> updateCliente(@RequestBody Cliente obj, @RequestParam("id") long id) {
-		obj = clienteService.update(id, obj);
-		return ResponseEntity.ok().body(obj);
-	}
+	@PutMapping("/cliente/{id}")
+    private ResponseEntity<Cliente> updateCliente(@RequestBody Cliente obj, @PathVariable("id") long id) {
+        obj = clienteService.update(id, obj);
+        return ResponseEntity.ok().body(obj);
+    }
 
 }

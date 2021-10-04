@@ -16,10 +16,11 @@ import accenturebank.com.accentureBank.exceptions.ClienteNotFoundException;
 import accenturebank.com.accentureBank.exceptions.CpfInvalidoException;
 import accenturebank.com.accentureBank.exceptions.DatabaseException;
 import accenturebank.com.accentureBank.exceptions.ValidaCPF;
+import accenturebank.com.accentureBank.interfaces.ClienteCRUD;
 import accenturebank.com.accentureBank.repositories.ClienteRepository;
 
 @Service
-public class ClienteService {
+public class ClienteService implements ClienteCRUD {
 
 	@Autowired
 	ClienteRepository clienteRepository;

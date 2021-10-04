@@ -3,16 +3,23 @@ package accenturebank.com.accentureBank.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import accenturebank.com.accentureBank.domain.Agencia;
 import accenturebank.com.accentureBank.exceptions.AgenciaNotFoundException;
 import accenturebank.com.accentureBank.exceptions.CampoObrigatorioEmptyException;
+import accenturebank.com.accentureBank.exceptions.ClienteNotFoundException;
+import accenturebank.com.accentureBank.exceptions.DatabaseException;
+import accenturebank.com.accentureBank.interfaces.AgenciaCRUD;
 import accenturebank.com.accentureBank.repositories.AgenciaRepository;
 
 @Service
-public class AgenciaService {
+public class AgenciaService implements AgenciaCRUD {
 
 	@Autowired
 	AgenciaRepository agenciaRepository;
@@ -27,10 +34,38 @@ public class AgenciaService {
 		return obj.orElseThrow(() -> new AgenciaNotFoundException(id));
 	}
 
-	public Agencia save(Agencia obj) throws CampoObrigatorioEmptyException {
+	public Agencia save(Agencia obj) {
 		validate(obj);
 		return agenciaRepository.save(obj);
+	}
 
+	public void delete(long id) {
+		try {
+			agenciaRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ClienteNotFoundException(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+
+	}
+
+	public Agencia update(long id, Agencia obj) {
+		validate(obj);
+		try {
+			Agencia agencia = agenciaRepository.getById(id);
+			updateData(agencia, obj);
+			return agenciaRepository.save(agencia);
+		} catch (EntityNotFoundException e) {
+			throw new ClienteNotFoundException("Agencia nÃ£o encontrada");
+		}
+
+	}
+
+	private void updateData(Agencia agencia, Agencia obj) {
+		agencia.setNome(obj.getNome());
+		agencia.setEndereco(obj.getEndereco());
+		agencia.setTelefone(obj.getTelefone());
 	}
 
 	private void validate(Agencia agencia) {

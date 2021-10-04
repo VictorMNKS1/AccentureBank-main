@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -49,17 +48,16 @@ public class ContaCorrenteController {
 
 	}
 
-	@PutMapping("/contacorrente/deposito")
-	public ResponseEntity<Double> depositar(@RequestParam("id") long id, @RequestParam("valor") double valor) {
-
+	@PutMapping("/contacorrente/deposito/{id}/{valor}")
+	public ResponseEntity<Double> depositar(@PathVariable("id") long id, @PathVariable("valor") double valor) {
 		contaCorrenteService.getContaCorrenteById(id);
 		Double depositar = contaCorrenteService.depositar(id, valor);
 		return ResponseEntity.ok().body(depositar);
-
+		
 	}
 
-	@PutMapping("/contacorrente/sacar")
-	public ResponseEntity<Double> sacar(@RequestParam("id") long id, @RequestParam("valor") double valor) {
+	@PutMapping("/contacorrente/sacar/{id}/{valor}")
+	public ResponseEntity<Double> sacar(@PathVariable("id") long id, @PathVariable("valor") double valor) {
 
 		contaCorrenteService.getContaCorrenteById(id);
 
@@ -68,8 +66,8 @@ public class ContaCorrenteController {
 
 	}
 
-	@PutMapping("/contacorrente/transferir")
-	public ResponseEntity<Double> transferir(@RequestParam("idContaInicial") long idContaInicial,@RequestParam("idContaDestino") long idContaDestino, @RequestParam("valorTransferencia") double valorTransferencia) {
+	@PutMapping("/contacorrente/transferir/{idContaInicial}/{valor}/{idContaDestino}")
+	public ResponseEntity<Double> transferir(@PathVariable("idContaInicial") long idContaInicial,@PathVariable("idContaDestino") long idContaDestino, @PathVariable("valorTransferencia") double valorTransferencia) {
 		contaCorrenteService.getContaCorrenteById(idContaInicial);
 
 		Double transferir = contaCorrenteService.transferir(idContaInicial, idContaDestino, valorTransferencia);
@@ -92,11 +90,9 @@ public class ContaCorrenteController {
 	}
 
 	@DeleteMapping("/contacorrente/{id}")
-	public ResponseEntity<Boolean> deleteContaCorrente(@PathVariable("id") long id) {
-		contaCorrenteService.getContaCorrenteById(id);
-
-		Boolean delete = contaCorrenteService.deleteContaCorrente(id);
-		return ResponseEntity.ok().body(delete);
+	public ResponseEntity<Void> deleteCliente(@PathVariable("id") long id) {
+		contaCorrenteService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }

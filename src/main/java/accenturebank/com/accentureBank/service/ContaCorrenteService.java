@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import accenturebank.com.accentureBank.domain.Agencia;
@@ -16,14 +18,15 @@ import accenturebank.com.accentureBank.entities.enums.TipoDeOperacaoEnum;
 import accenturebank.com.accentureBank.exceptions.AgenciaNotFoundException;
 import accenturebank.com.accentureBank.exceptions.CampoObrigatorioEmptyException;
 import accenturebank.com.accentureBank.exceptions.ContaCorrenteNotFoundException;
+import accenturebank.com.accentureBank.exceptions.DatabaseException;
 import accenturebank.com.accentureBank.exceptions.SaldoInsuficienteException;
-import accenturebank.com.accentureBank.interfaces.OperacoesConta;
+import accenturebank.com.accentureBank.interfaces.ContaCorrenteCRUD;
 import accenturebank.com.accentureBank.repositories.AgenciaRepository;
 import accenturebank.com.accentureBank.repositories.ContaCorrenteRepository;
 import accenturebank.com.accentureBank.repositories.ExtratoRepository;
 
 @Service
-public class ContaCorrenteService implements OperacoesConta {
+public class ContaCorrenteService implements ContaCorrenteCRUD {
 	@Autowired
 	ContaCorrenteRepository contaCorrenteRepository;
 	@Autowired
@@ -42,13 +45,13 @@ public class ContaCorrenteService implements OperacoesConta {
 
 	}
 
-	public ContaCorrente getContaCorrenteById(Long id) throws ContaCorrenteNotFoundException {
+	public ContaCorrente getContaCorrenteById(Long id){
 
 		Optional<ContaCorrente> obj = contaCorrenteRepository.findById(id);
 		return obj.orElseThrow(() -> new ContaCorrenteNotFoundException("Conta Corrente nao encontrada " + id));
 	}
 
-	public double getSaldoContaCorrenteByIdCliente(long id) throws ContaCorrenteNotFoundException {
+	public double getSaldoContaCorrenteByIdCliente(long id){
 
 		double saldo = contaCorrenteRepository.findById(id).get().getContaCorrenteSaldo();
 
@@ -71,7 +74,6 @@ public class ContaCorrenteService implements OperacoesConta {
 			throw new SaldoInsuficienteException("Saldo insuficiente para saque");
 		}
 
-
 	}
 
 	public Double depositar(Long id, double valorDeposito) {
@@ -83,16 +85,12 @@ public class ContaCorrenteService implements OperacoesConta {
 		double contaCorrenteSaldo = contaCorrenteRepository.findById(id).get().getContaCorrenteSaldo();
 		double resultadoDeposito = contaCorrenteSaldo + valorDeposito;
 
-
-
-			// DEPOSITO NA CONTA
-			operacaoContaCorrente(id, resultadoDeposito, valorDeposito, TipoDeOperacaoEnum.DEPOSITO);
-			if (valorDeposito > 0) {
-				throw new SaldoInsuficienteException("O valor de deposito tem que ser maior que 1");
-			}
-			// DEPOSITO NA CONTA
+		if (valorDeposito > 0) {
 			operacaoContaCorrente(id, resultadoDeposito, valorDeposito, TipoDeOperacaoEnum.DEPOSITO);
 			return valorDeposito;
+
+		}
+		throw new SaldoInsuficienteException("O valor de deposito tem que ser maior que 1");
 
 	}
 
@@ -131,10 +129,9 @@ public class ContaCorrenteService implements OperacoesConta {
 			throw new SaldoInsuficienteException("Saldo em conta inferior a valor de transferência");
 		}
 	}
-	
 
 	public ContaCorrente save(ContaCorrenteDTO contaCorrenteDTO) throws AgenciaNotFoundException {
-		
+
 		validate(contaCorrenteDTO);
 		Cliente clienteRetorno = clienteService.getClienteById(contaCorrenteDTO.getIdCliente());
 		Agencia agenciaRetorno = agenciaService.getAgenciaById(contaCorrenteDTO.getIdAgencia());
@@ -166,8 +163,7 @@ public class ContaCorrenteService implements OperacoesConta {
 		contaCorrenteRepository.save(contaCorrente);
 
 		LocalDateTime data = LocalDateTime.now();
-		Extrato extratoContaCorrente = new Extrato(contaCorrenteId, valorOperacao, saldoContaCorrente, data, operacao,
-				contaCorrente);
+		Extrato extratoContaCorrente = new Extrato(valorOperacao, saldoContaCorrente, data, operacao, contaCorrente);
 		extratoRepository.save(extratoContaCorrente);
 	}
 
@@ -206,9 +202,15 @@ public class ContaCorrenteService implements OperacoesConta {
 		}
 	}
 
-	public Boolean deleteContaCorrente(long id) throws ContaCorrenteNotFoundException {
-		contaCorrenteRepository.deleteById(id);
-		return true;
+	public void delete(long id) {
+		try {
+			contaCorrenteRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new AgenciaNotFoundException(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+
 
 	}
 
@@ -222,10 +224,10 @@ public class ContaCorrenteService implements OperacoesConta {
 		String numeroContaCorrente = Integer.toString(numero);
 		return numeroContaCorrente;
 	}
-	
+
 	private void validate(ContaCorrenteDTO obj) {
 
-		if (obj.getIdAgencia() == null ){
+		if (obj.getIdAgencia() == null) {
 			throw new CampoObrigatorioEmptyException("Por favor informe o id da agencia");
 		}
 		if (obj.getIdCliente() == null) {
@@ -233,5 +235,19 @@ public class ContaCorrenteService implements OperacoesConta {
 		}
 
 	}
+
+	@Override
+	public List<ContaCorrente> getAllContaCorrente() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ContaCorrente getContaCorrenteById(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 
 }

@@ -52,8 +52,7 @@ public class Extrato implements Serializable {
 	}
 
 
-	public Extrato(double valorOperacao, TipoDeOperacaoEnum operacao, double saldo, LocalDateTime dataHoraMovimento,
-			ContaCorrente contaCorrente) {
+	public Extrato(double valorOperacao,double saldo, LocalDateTime dataHoraMovimento, TipoDeOperacaoEnum operacao, ContaCorrente contaCorrente) {
 		super();
 		this.valorOperacao = valorOperacao;
 		this.operacao = operacao;

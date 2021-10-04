@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -38,8 +40,23 @@ public class AgenciaController {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 			.buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj);
-	}	
+	}
+	
+	@PutMapping("/agencia")
+	public ResponseEntity<Agencia> update(@RequestBody Agencia obj, @PathVariable Long id) {
+		obj = agenciaService.update(id, obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+			.buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).body(obj);
+	}
+	
+	@DeleteMapping("/agencia/{id}")
+	public ResponseEntity<Void> delete(@PathVariable("id") long id) {
+		agenciaService.delete(id);
+		return ResponseEntity.noContent().build();
+	}
 
+	
 		
 
 }

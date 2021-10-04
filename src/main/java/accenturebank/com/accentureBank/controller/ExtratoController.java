@@ -18,13 +18,13 @@ public class ExtratoController {
 	ExtratoService extratoService;
 	
 	@GetMapping("/extratos")
-    public ResponseEntity<List<Extrato>> getAllExtrato() {
+    public ResponseEntity<List<Extrato>> getAllExtratos() {
 		List<Extrato> list = extratoService.getAllExtrato();
 		return ResponseEntity.ok().body(list);
     }
 	
 	@GetMapping("/extrato/{id}")
-    public ResponseEntity<List<Extrato>> getAllExtratoById(@PathVariable("id") long id) {
+    public ResponseEntity<List<Extrato>> getAllExtratosById(@PathVariable("id") long id) {
 			List<Extrato> obj = extratoService.getAllExtratoporCliente(id);
     		return ResponseEntity.ok().body(obj);
 	

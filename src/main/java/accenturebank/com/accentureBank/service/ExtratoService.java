@@ -9,11 +9,12 @@ import accenturebank.com.accentureBank.domain.Cliente;
 import accenturebank.com.accentureBank.domain.ContaCorrente;
 import accenturebank.com.accentureBank.domain.Extrato;
 import accenturebank.com.accentureBank.exceptions.ContaCorrenteNotFoundException;
+import accenturebank.com.accentureBank.interfaces.ExtratoCRUD;
 import accenturebank.com.accentureBank.repositories.ContaCorrenteRepository;
 import accenturebank.com.accentureBank.repositories.ExtratoRepository;
 
 @Service
-public class ExtratoService {
+public class ExtratoService implements ExtratoCRUD {
 
 	@Autowired
 	ExtratoRepository extratoRepository;
@@ -28,7 +29,7 @@ public class ExtratoService {
 		return extratoRepository.findAll();
 	}
 
-	public List<Extrato> getAllExtratoporCliente(Long id) throws ContaCorrenteNotFoundException {
+	public List<Extrato> getAllExtratoporCliente(Long id) {
 		Cliente cliente = clienteService.getClienteById(id);
 		ContaCorrente contaCorrente = contaCorrenteService.getContaCorrenteByCliente(cliente);
 		List<Extrato> extratoContaCorrenteId = extratoRepository.findByContaCorrente(contaCorrente);
