@@ -42,7 +42,7 @@ public class AgenciaController {
 		return ResponseEntity.created(uri).body(obj);
 	}
 	
-	@PutMapping("/agencia")
+	@PutMapping("/agencia/{id}")
 	public ResponseEntity<Agencia> update(@RequestBody Agencia obj, @PathVariable Long id) {
 		obj = agenciaService.update(id, obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")

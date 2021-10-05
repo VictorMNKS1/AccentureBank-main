@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -67,10 +68,10 @@ public class ContaCorrenteController {
 	}
 
 	@PutMapping("/contacorrente/transferir/{idContaInicial}/{valor}/{idContaDestino}")
-	public ResponseEntity<Double> transferir(@PathVariable("idContaInicial") long idContaInicial,@PathVariable("idContaDestino") long idContaDestino, @PathVariable("valorTransferencia") double valorTransferencia) {
+	public ResponseEntity<Double> transferir(@PathVariable("idContaInicial") long idContaInicial,@PathVariable("idContaDestino") long idContaDestino, @RequestParam("valorTransferencia") double valorTransferencia) {
 		contaCorrenteService.getContaCorrenteById(idContaInicial);
 
-		Double transferir = contaCorrenteService.transferir(idContaInicial, idContaDestino, valorTransferencia);
+		double transferir = contaCorrenteService.transferir(idContaInicial, idContaDestino, valorTransferencia);
 		return ResponseEntity.ok().body(transferir);
 
 	}
@@ -90,7 +91,7 @@ public class ContaCorrenteController {
 	}
 
 	@DeleteMapping("/contacorrente/{id}")
-	public ResponseEntity<Void> deleteCliente(@PathVariable("id") long id) {
+	public ResponseEntity<Void> delete(@PathVariable("id") long id) {
 		contaCorrenteService.delete(id);
 		return ResponseEntity.noContent().build();
 	}

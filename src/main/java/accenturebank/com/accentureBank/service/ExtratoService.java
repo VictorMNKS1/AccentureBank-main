@@ -36,7 +36,7 @@ public class ExtratoService implements ExtratoCRUD {
 
 		if (extratoContaCorrenteId.isEmpty() || extratoContaCorrenteId == null) {
 			throw new ContaCorrenteNotFoundException("Extrato vazio.");
-		}
+		} 
 		return extratoContaCorrenteId;
 	}
 

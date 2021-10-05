@@ -43,7 +43,7 @@ public class AgenciaService implements AgenciaCRUD {
 		try {
 			agenciaRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new ClienteNotFoundException(id);
+			throw new AgenciaNotFoundException(id);
 		} catch (DataIntegrityViolationException e) {
 			throw new DatabaseException(e.getMessage());
 		}

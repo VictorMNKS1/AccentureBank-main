@@ -5,6 +5,7 @@ import java.util.List;
 import accenturebank.com.accentureBank.domain.Cliente;
 import accenturebank.com.accentureBank.domain.ContaCorrente;
 import accenturebank.com.accentureBank.dto.ContaCorrenteDTO;
+import accenturebank.com.accentureBank.entities.enums.TipoDeOperacaoEnum;
 
 public interface ContaCorrenteCRUD {
 
@@ -13,10 +14,15 @@ public interface ContaCorrenteCRUD {
 	* PRINCIPAIS DE UMA CONTA CORRENTE
 	*/
 	
-	public List<ContaCorrente> getAllContaCorrente();
+	public List<ContaCorrente> getAllContasCorrentes();
+	
+	public ContaCorrente getContaCorrenteById(Long id);
+	
+	public void operacaoContaCorrente(long id, double resultadoOperacao, double valorOperacao,
+			TipoDeOperacaoEnum operacao);
 
 
-	public ContaCorrente getContaCorrenteById(long id);
+	public double getSaldoContaCorrenteByIdCliente(long id);
 		
 	
 	public ContaCorrente save(ContaCorrenteDTO ContaCorrenteDTO);
@@ -24,6 +30,8 @@ public interface ContaCorrenteCRUD {
 	public void delete(long id);
 	
 	public ContaCorrente getContaCorrenteByCliente(Cliente cliente);
+	
+	public Double recalcularSaldo(long id);
 	
 	public Double sacar(Long id, double valorSaque);
 

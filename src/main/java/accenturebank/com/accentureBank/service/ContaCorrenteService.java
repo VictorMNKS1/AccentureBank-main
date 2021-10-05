@@ -236,18 +236,4 @@ public class ContaCorrenteService implements ContaCorrenteCRUD {
 
 	}
 
-	@Override
-	public List<ContaCorrente> getAllContaCorrente() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ContaCorrente getContaCorrenteById(long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
-
 }
