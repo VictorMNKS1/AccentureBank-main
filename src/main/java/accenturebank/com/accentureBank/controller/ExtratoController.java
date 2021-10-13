@@ -15,7 +15,7 @@ import accenturebank.com.accentureBank.service.ExtratoService;
 public class ExtratoController {
 	
 	@Autowired
-	ExtratoService extratoService;
+	private ExtratoService extratoService;
 	
 	@GetMapping("/extratos")
     public ResponseEntity<List<Extrato>> getAllExtratos() {

@@ -25,7 +25,7 @@ import accenturebank.com.accentureBank.service.ContaCorrenteService;
 public class ContaCorrenteController {
 
 	@Autowired
-	ContaCorrenteService contaCorrenteService;
+	private ContaCorrenteService contaCorrenteService;
 
 	@GetMapping("/contascorrentes")
 	private ResponseEntity<List<ContaCorrente>> getAllContasCorrentes() {

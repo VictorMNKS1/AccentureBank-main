@@ -24,14 +24,14 @@ public class ContaCorrenteRepositoryTest {
 		assertThat(contaCorrenteRepository).isNotNull();
 		
         ContaCorrente cc = new ContaCorrente();
-        cc.setContaCorrenteNumero("5776");
-        cc.setContaCorrenteSaldo(2000.0);
+        cc.setNumero("5776");
+        cc.setSaldo(2000.0);
         contaCorrenteRepository.saveAndFlush(cc);
         
         testRead = contaCorrenteRepository.findById(cc.getId()).orElseThrow(NoSuchElementException::new);
         
-        assertThat(testRead.getContaCorrenteSaldo()).isEqualTo(2000.0);
-        assertThat(testRead.getContaCorrenteNumero()).isEqualTo("5776");
+        assertThat(testRead.getSaldo()).isEqualTo(2000.0);
+        assertThat(testRead.getNumero()).isEqualTo("5776");
     }
 	
     @Test
@@ -39,18 +39,18 @@ public class ContaCorrenteRepositoryTest {
         ContaCorrente testeUpdate;
 
         ContaCorrente cc = new ContaCorrente();
-        cc.setContaCorrenteNumero("5776");
-        cc.setContaCorrenteSaldo(2000.0);
+        cc.setNumero("5776");
+        cc.setSaldo(2000.0);
         contaCorrenteRepository.saveAndFlush(cc);
 
-        cc.setContaCorrenteNumero("66666");
-        cc.setContaCorrenteSaldo(4000.0);
+        cc.setNumero("66666");
+        cc.setSaldo(4000.0);
         contaCorrenteRepository.saveAndFlush(cc);
 
         testeUpdate = contaCorrenteRepository.findById(cc.getId()).orElseThrow(NoSuchElementException::new);
 
-        assertThat(testeUpdate.getContaCorrenteNumero()).isEqualTo("66666");
-        assertThat(testeUpdate.getContaCorrenteSaldo()).isEqualTo(4000.0);
+        assertThat(testeUpdate.getNumero()).isEqualTo("66666");
+        assertThat(testeUpdate.getSaldo()).isEqualTo(4000.0);
     }
     
  

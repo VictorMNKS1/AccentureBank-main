@@ -27,10 +27,10 @@ public class ContaCorrente implements Serializable {
 	private Agencia agencia;
 
 	@Column
-	private String contaCorrenteNumero;
+	private String numero;
 
 	@Column
-	private double contaCorrenteSaldo;
+	private double saldo;
 
 	@OneToOne
 	@JoinColumn(name = "cliente_id", unique = true)
@@ -39,21 +39,22 @@ public class ContaCorrente implements Serializable {
 	public ContaCorrente() {
 	}
 
-	public ContaCorrente(Long id, Agencia agencia, String contaCorrenteNumero, double contaCorrenteSaldo,
-			Cliente cliente) {
+
+
+	public ContaCorrente(Long id, Agencia agencia, String numero, double saldo, Cliente cliente) {
 		super();
 		this.id = id;
 		this.agencia = agencia;
-		this.contaCorrenteNumero = contaCorrenteNumero;
-		this.contaCorrenteSaldo = contaCorrenteSaldo;
+		this.numero = numero;
+		this.saldo = saldo;
 		this.cliente = cliente;
 	}
 
-	public ContaCorrente(Agencia agencia, String contaCorrenteNumero, double contaCorrenteSaldo, Cliente cliente) {
+	public ContaCorrente(Agencia agencia, String numero, double saldo, Cliente cliente) {
 		super();
 		this.agencia = agencia;
-		this.contaCorrenteNumero = contaCorrenteNumero;
-		this.contaCorrenteSaldo = contaCorrenteSaldo;
+		this.numero = numero;
+		this.saldo = saldo;
 		this.cliente = cliente;
 	}
 
@@ -61,41 +62,61 @@ public class ContaCorrente implements Serializable {
 		return id;
 	}
 
+
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+
 
 	public Agencia getAgencia() {
 		return agencia;
 	}
 
+
+
 	public void setAgencia(Agencia agencia) {
 		this.agencia = agencia;
 	}
 
-	public String getContaCorrenteNumero() {
-		return contaCorrenteNumero;
+
+
+	public String getNumero() {
+		return numero;
 	}
 
-	public void setContaCorrenteNumero(String contaCorrenteNumero) {
-		this.contaCorrenteNumero = contaCorrenteNumero;
+
+
+	public void setNumero(String numero) {
+		this.numero = numero;
 	}
 
-	public double getContaCorrenteSaldo() {
-		return contaCorrenteSaldo;
+
+
+	public double getSaldo() {
+		return saldo;
 	}
 
-	public void setContaCorrenteSaldo(double contaCorrenteSaldo) {
-		this.contaCorrenteSaldo = contaCorrenteSaldo;
+
+
+	public void setSaldo(double saldo) {
+		this.saldo = saldo;
 	}
+
+
 
 	public Cliente getCliente() {
 		return cliente;
 	}
 
+
+
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+
+
 
 	@Override
 	public boolean equals(Object obj) {

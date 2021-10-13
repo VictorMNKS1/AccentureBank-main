@@ -22,7 +22,7 @@ import accenturebank.com.accentureBank.service.ClienteService;
 public class ClienteController {
 
 	@Autowired
-	ClienteService clienteService;
+	private ClienteService clienteService;
 
 	@GetMapping("/clientes")
 	public ResponseEntity<List<Cliente>> getallClientes() {

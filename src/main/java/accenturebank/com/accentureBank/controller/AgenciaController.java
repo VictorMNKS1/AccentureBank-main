@@ -20,9 +20,9 @@ import accenturebank.com.accentureBank.service.AgenciaService;
 @RestController
 public class AgenciaController {
 	@Autowired
-	AgenciaService agenciaService;
+	private AgenciaService agenciaService;
 
-	@GetMapping("/agencias")
+	@GetMapping("/agencia")
 	public ResponseEntity<List<Agencia>> getallAgencias() {
 		List<Agencia> list = agenciaService.getAllAgencia();
 		return ResponseEntity.ok().body(list);

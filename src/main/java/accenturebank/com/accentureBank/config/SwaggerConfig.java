@@ -1,4 +1,4 @@
-package accenturebank.com.accentureBank.doc;
+package accenturebank.com.accentureBank.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

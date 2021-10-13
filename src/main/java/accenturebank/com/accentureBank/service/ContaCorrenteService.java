@@ -53,7 +53,7 @@ public class ContaCorrenteService implements ContaCorrenteCRUD {
 
 	public double getSaldoContaCorrenteByIdCliente(long id){
 
-		double saldo = contaCorrenteRepository.findById(id).get().getContaCorrenteSaldo();
+		double saldo = contaCorrenteRepository.findById(id).get().getSaldo();
 
 		return saldo;
 	}
@@ -64,7 +64,7 @@ public class ContaCorrenteService implements ContaCorrenteCRUD {
 		contaCorrenteRepository.findById(id);
 
 		// PEGAR O SALDO DA CONTA E CALCULAR O SAQUE
-		double contaCorrenteSaldo = contaCorrenteRepository.findById(id).get().getContaCorrenteSaldo();
+		double contaCorrenteSaldo = contaCorrenteRepository.findById(id).get().getSaldo();
 		double resultadoSaque = contaCorrenteSaldo - valorSaque;
 
 		if ((contaCorrenteSaldo >= valorSaque) && (valorSaque > 0)) {
@@ -82,7 +82,7 @@ public class ContaCorrenteService implements ContaCorrenteCRUD {
 		contaCorrenteRepository.findById(id);
 
 		// PEGAR O SALDO DA CONTA E CALCULAR O DEPOSITO
-		double contaCorrenteSaldo = contaCorrenteRepository.findById(id).get().getContaCorrenteSaldo();
+		double contaCorrenteSaldo = contaCorrenteRepository.findById(id).get().getSaldo();
 		double resultadoDeposito = contaCorrenteSaldo + valorDeposito;
 
 		if (valorDeposito > 0) {
@@ -106,8 +106,8 @@ public class ContaCorrenteService implements ContaCorrenteCRUD {
 
 		// PEGANDO O SALDO DAS CONTAS
 
-		double contaCorrenteInicialSaldo = contaCorrenteInicial.get().getContaCorrenteSaldo();
-		double contaCorrenteDestinoSaldo = contaCorrenteDestino.get().getContaCorrenteSaldo();
+		double contaCorrenteInicialSaldo = contaCorrenteInicial.get().getSaldo();
+		double contaCorrenteDestinoSaldo = contaCorrenteDestino.get().getSaldo();
 
 		// CALCULOS DAS OPERAÇÕES
 
@@ -153,9 +153,9 @@ public class ContaCorrenteService implements ContaCorrenteCRUD {
 			TipoDeOperacaoEnum operacao) {
 		Long contaCorrenteId = contaCorrenteRepository.getById(id).getId();
 		Agencia agenciaContaCorrente = contaCorrenteRepository.getById(id).getAgencia();
-		String numeroContaCorrente = contaCorrenteRepository.getById(id).getContaCorrenteNumero();
+		String numeroContaCorrente = contaCorrenteRepository.getById(id).getNumero();
 		Cliente clienteContaCorrente = contaCorrenteRepository.getById(id).getCliente();
-		double saldoContaCorrente = contaCorrenteRepository.getById(id).getContaCorrenteSaldo();
+		double saldoContaCorrente = contaCorrenteRepository.getById(id).getSaldo();
 
 		ContaCorrente contaCorrente = new ContaCorrente(contaCorrenteId, agenciaContaCorrente, numeroContaCorrente,
 				resultadoOperacao, clienteContaCorrente);
@@ -196,7 +196,7 @@ public class ContaCorrenteService implements ContaCorrenteCRUD {
 		if (valorTotalExtrato == saldoAtual) {
 			return saldoAtual;
 		} else {
-			this.getContaCorrenteById(contaId).setContaCorrenteSaldo(valorTotalExtrato);
+			this.getContaCorrenteById(contaId).setSaldo(valorTotalExtrato);
 			contaCorrenteRepository.save(getContaCorrenteByIdCliente);
 			return (double) 0;
 		}
